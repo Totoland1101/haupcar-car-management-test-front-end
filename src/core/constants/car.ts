@@ -65,6 +65,10 @@ export function modelsForBrand(brand: string | undefined): string[] {
   return key ? CAR_MODELS[key] : [];
 }
 
+// A Thai private car plate: an optional leading digit, one or two Thai consonants, then a
+// number from 1 to 9999, e.g. 1กข 1234. The API checks the same rule.
+export const THAI_PLATE = /^[1-9]?\s*[ก-ฮ]{1,2}\s*[1-9][0-9]{0,3}$/;
+
 // All 77 Thai provinces, in Thai alphabetical order.
 export const PROVINCES = [
   "กรุงเทพมหานคร", "กระบี่", "กาญจนบุรี", "กาฬสินธุ์", "กำแพงเพชร", "ขอนแก่น", "จันทบุรี",

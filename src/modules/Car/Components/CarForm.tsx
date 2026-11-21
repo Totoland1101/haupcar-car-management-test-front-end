@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dayjs, { type Dayjs } from "dayjs";
 import { AutoComplete, Button, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select } from "antd";
-import { COMMON_BRANDS, FUEL_OPTIONS, PROVINCES, STATUS_OPTIONS, modelsForBrand } from "@/core/constants/car";
+import { COMMON_BRANDS, FUEL_OPTIONS, PROVINCES, STATUS_OPTIONS, THAI_PLATE, modelsForBrand } from "@/core/constants/car";
 import type { Car, CarPayload, CarStatus, FuelType } from "@/core/services/car";
 import type { ResponseError } from "@/core/utils/http_response";
 
@@ -131,7 +131,16 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           <Form.Item
             label="Registration number"
             name="registrationNumber"
-            rules={[required("Registration number"), { max: 20 }]}
+            rules={[
+              required("Registration number"),
+              { max: 20 },
+              {
+                validator: (_, value?: string) =>
+                  !value?.trim() || THAI_PLATE.test(value.trim())
+                    ? Promise.resolve()
+                    : Promise.reject(new Error("Use a Thai plate, e.g. 1กข 1234 or กข 1234")),
+              },
+            ]}
             extra="As shown on the plate, e.g. 1กข 1234"
           >
             <Input placeholder="1กข 1234" maxLength={20} autoFocus />
