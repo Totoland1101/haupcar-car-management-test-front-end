@@ -2,10 +2,14 @@
   "name": "car-management-web",
   "version": "1.0.0",
   "private": true,
+  "description": "Web app for haupcar-management",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
+  },
+  "engines": {
+    "node": ">=20.17"
   },
   "dependencies": {
     "@ant-design/icons": "^6.3.4",
