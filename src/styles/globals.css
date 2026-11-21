@@ -342,10 +342,10 @@ html[data-theme='dark'] .mobile-logo {
 
 /* ===== Car photos ===== */
 
-/* Four across on wide screens, two on a phone */
+/* Four across, at most 300px each, and two on a phone */
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 300px));
   gap: 12px;
 }
 
