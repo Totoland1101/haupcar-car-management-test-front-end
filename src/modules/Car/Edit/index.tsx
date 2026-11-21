@@ -7,6 +7,7 @@ import PageHeader from "@/components/PageHeader";
 import useCar from "@/core/hooks/useCar";
 import type { CarPayload } from "@/core/services/car";
 import CarForm from "../Components/CarForm";
+import CarPhotos from "../Components/CarPhotos";
 import LoadError from "../Components/LoadError";
 
 export default function CarEdit({ id }: { id: string }) {
@@ -58,6 +59,11 @@ export default function CarEdit({ id }: { id: string }) {
           />
         )}
       </Card>
+      {loaded && car && (
+        <Card title="Photos" style={{ maxWidth: 820, marginTop: 16 }}>
+          <CarPhotos carId={car.id} editable />
+        </Card>
+      )}
     </>
   );
 }

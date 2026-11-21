@@ -33,14 +33,25 @@ function buildURL(path: string, params?: QueryParams): string {
   return `${baseURL}${path}${queryString ? `?${queryString}` : ""}`;
 }
 
+interface RequestOptions {
+  params?: QueryParams;
+  /** Sent as JSON */
+  body?: unknown;
+  /** Sent as it is, e.g. an image file, with its own content type */
+  file?: Blob;
+  /** "blob" for images, otherwise the response is read as JSON */
+  responseType?: "json" | "blob";
+}
+
 async function request<T>(
   method: string,
   path: string,
-  { params, body }: { params?: QueryParams; body?: unknown } = {}
+  { params, body, file, responseType = "json" }: RequestOptions = {}
 ): Promise<HttpResponseData<T>> {
   const token = getAccessToken();
   const headers: Record<string, string> = {};
   if (body !== undefined) headers["Content-Type"] = "application/json";
+  if (file) headers["Content-Type"] = file.type;
   if (token) headers.Authorization = `Bearer ${token}`;
 
   let res: Response;
@@ -48,7 +59,7 @@ async function request<T>(
     res = await fetch(buildURL(path, params), {
       method,
       headers,
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: file ?? (body === undefined ? undefined : JSON.stringify(body)),
       cache: "no-store",
     });
   } catch {
@@ -56,7 +67,12 @@ async function request<T>(
     throw new HttpError(0, "Cannot reach the API server. Check that the backend is running.");
   }
 
-  const data = res.status === 204 ? null : await res.json().catch(() => null);
+  const data =
+    res.status === 204
+      ? null
+      : res.ok && responseType === "blob"
+        ? await res.blob()
+        : await res.json().catch(() => null);
 
   // The token expired or the account was disabled. Go back to the login page, and return
   // to this page after logging in. A 401 without a token is a failed login, so it stays here.
@@ -80,6 +96,8 @@ const HttpService = {
   post: <T>(path: string, body?: unknown) => request<T>("POST", path, { body }),
   put: <T>(path: string, body?: unknown) => request<T>("PUT", path, { body }),
   delete: <T = null>(path: string) => request<T>("DELETE", path),
+  getBlob: (path: string) => request<Blob>("GET", path, { responseType: "blob" }),
+  putFile: <T>(path: string, file: Blob) => request<T>("PUT", path, { file }),
 };
 
 const Http = {

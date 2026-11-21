@@ -323,6 +323,69 @@ html[data-theme='dark'] .mobile-logo {
   gap: 20px;
 }
 
+/* ===== Car photos ===== */
+
+/* Four across on wide screens, two on a phone */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.photo-grid-loading {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.photo-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.photo-frame {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.photo-frame .ant-image,
+.photo-frame .ant-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+  font-size: 13px;
+  opacity: 0.55;
+}
+
+.photo-empty .anticon {
+  font-size: 24px;
+}
+
+.photo-actions {
+  display: flex;
+  gap: 6px;
+}
+
+@media (max-width: 768px) {
+  .photo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* ===== Login (SideLayout) ===== */
 
 .side-layout {
