@@ -5,13 +5,39 @@ const { HttpService } = Http;
 
 export type UserStatus = "pending" | "approved" | "rejected";
 
+export interface Department {
+  id: number;
+  name: string;
+}
+
+/** Who the person is. Stored in haup_profiles, one row per user. */
+export interface Profile {
+  firstName: string;
+  lastName: string | null;
+  email: string | null;
+  phone: string | null;
+  jobTitle: string | null;
+  department: Department | null;
+}
+
+export interface ProfilePayload {
+  firstName: string;
+  lastName: string | null;
+  email: string | null;
+  phone: string | null;
+  jobTitle: string | null;
+  departmentId: number | null;
+}
+
 export interface User {
   id: number;
   username: string;
+  /** First and last name together, for display */
   name: string;
   isActive: boolean;
   lastLoginAt: string | null;
   status: UserStatus;
+  profile: Profile;
   /** null for a registration that hasn't been approved yet */
   role: { id: number; name: string } | null;
   /** When the registration was approved or rejected, or the account was created by an admin */
@@ -23,11 +49,11 @@ export interface User {
 
 export interface UserPayload {
   username: string;
-  name: string;
   /** Required for a new user. On update, null keeps the current password. */
   password: string | null;
   roleId: number;
   isActive: boolean;
+  profile: ProfilePayload;
 }
 
 const UserService = {

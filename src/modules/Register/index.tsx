@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Alert, Button, Form, Input, Result } from "antd";
-import { IdcardOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import { IdcardOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import SideLayout from "@/components/Layouts/SideLayout";
 import { useAuth } from "@/core/context/AuthContext";
 
 interface RegisterValues {
-  name: string;
+  firstName: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
   username: string;
   password: string;
   confirmPassword: string;
@@ -28,17 +31,26 @@ export default function Register() {
     if (status === "authenticated") router.replace("/");
   }, [status, router]);
 
-  async function handleFinish({ name, username, password }: RegisterValues) {
+  async function handleFinish({ firstName, lastName, email, phone, username, password }: RegisterValues) {
     setSubmitting(true);
     setError(null);
-    const response = await register({ name, username, password });
+    const blankToNull = (value?: string) => value?.trim() || null;
+    const response = await register({
+      username,
+      password,
+      profile: { firstName: firstName.trim(), lastName: blankToNull(lastName), email: blankToNull(email), phone: blankToNull(phone) },
+    });
     if (response.success) {
       setDoneMessage(response.data.message);
       return;
     }
     if (response.error.details.length) {
       form.setFields(
-        response.error.details.map(({ field, message }) => ({ name: field as keyof RegisterValues, errors: [message] }))
+        // "profile.firstName" from the API is "firstName" in this form.
+        response.error.details.map(({ field, message }) => ({
+          name: field.replace(/^profile\./, "") as keyof RegisterValues,
+          errors: [message],
+        }))
       );
     } else {
       setError(response.error.message);
@@ -79,11 +91,24 @@ export default function Register() {
         onFinish={handleFinish}
       >
         <Form.Item
-          label="Name"
-          name="name"
-          rules={[{ required: true, whitespace: true, message: "Name is required" }, { max: 100 }]}
+          label="First name"
+          name="firstName"
+          rules={[{ required: true, whitespace: true, message: "First name is required" }, { max: 100 }]}
         >
-          <Input prefix={<IdcardOutlined />} placeholder="e.g. Somchai Jaidee" autoComplete="name" autoFocus />
+          <Input prefix={<IdcardOutlined />} autoComplete="given-name" autoFocus />
+        </Form.Item>
+        <Form.Item label="Last name" name="lastName" rules={[{ max: 100 }]}>
+          <Input prefix={<IdcardOutlined />} autoComplete="family-name" />
+        </Form.Item>
+        <Form.Item label="Email" name="email" rules={[{ type: "email", message: "Email is not valid" }, { max: 255 }]}>
+          <Input prefix={<MailOutlined />} autoComplete="email" />
+        </Form.Item>
+        <Form.Item
+          label="Phone"
+          name="phone"
+          rules={[{ pattern: /^[0-9+\-() ]+$/, message: "Use digits, spaces and + - ( )" }, { max: 30 }]}
+        >
+          <Input prefix={<PhoneOutlined />} autoComplete="tel" />
         </Form.Item>
         <Form.Item
           label="Username"

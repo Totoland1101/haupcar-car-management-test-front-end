@@ -42,6 +42,8 @@ export default function Approval() {
   const columns: TableProps<User>["columns"] = [
     { title: "Name", dataIndex: "name" },
     { title: "Username", dataIndex: "username" },
+    { title: "Email", key: "email", render: (_: unknown, user: User) => user.profile.email ?? "-" },
+    { title: "Phone", key: "phone", render: (_: unknown, user: User) => user.profile.phone ?? "-" },
     { title: "Registered", dataIndex: "createdAt", render: formatDateTime },
     ...(status === "rejected"
       ? [
@@ -110,7 +112,7 @@ export default function Approval() {
             dataSource={registrationList}
             loading={loading}
             pagination={false}
-            scroll={{ x: 720 }}
+            scroll={{ x: 900 }}
             locale={{
               emptyText: (
                 <Empty

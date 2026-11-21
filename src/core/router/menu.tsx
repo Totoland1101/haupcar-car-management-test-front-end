@@ -27,14 +27,17 @@ export const mainMenu: MenuEntry[] = [
     icon: <SettingOutlined />,
     children: [
       { key: "/users", label: "Users", path: "/users", permission: [PERMISSIONS.USER_MANAGE] },
+      { key: "/departments", label: "Departments", path: "/departments", permission: [PERMISSIONS.USER_MANAGE] },
       { key: "/roles", label: "Roles", path: "/roles", permission: [PERMISSIONS.ROLE_MANAGE] },
       { key: "/approvals", label: "Approvals", path: "/approvals", permission: [PERMISSIONS.USER_APPROVE] },
     ],
   },
 ];
 
-// The menu key for the current page, e.g. /cars/12/edit belongs to "/".
+// The menu key for the current page, e.g. /cars/12/edit belongs to "/". Pages outside the
+// menu, such as /profile, highlight nothing.
 export function selectedMenuKey(pathname: string): string {
+  if (pathname === "/" || pathname.startsWith("/cars")) return "/";
   const paths = mainMenu.flatMap((entry) => entry.children ?? [entry]).map((entry) => entry.key);
-  return paths.find((key) => key !== "/" && pathname.startsWith(key)) ?? "/";
+  return paths.find((key) => key !== "/" && pathname.startsWith(key)) ?? "";
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { Avatar, Button, Dropdown, Tag, Tooltip, theme, type MenuProps } from "antd";
-import { DownOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
+import { DownOutlined, IdcardOutlined, LogoutOutlined, MoonOutlined, SunOutlined, UserOutlined } from "@ant-design/icons";
 import { useAuth } from "@/core/context/AuthContext";
 import { useLayout } from "@/core/context/LayoutContext";
 import { useThemeMode } from "@/core/context/ThemeContext";
@@ -13,13 +14,18 @@ interface HeaderProps {
 }
 
 export default function Header({ left }: HeaderProps) {
+  const router = useRouter();
   const { token } = theme.useToken();
   const { isMobile } = useLayout();
   const { mode, toggle } = useThemeMode();
   const { user, logout } = useAuth();
   const nextMode = mode === "dark" ? "light" : "dark";
 
-  const items: MenuProps["items"] = [{ key: "signout", icon: <LogoutOutlined />, label: "Log out" }];
+  const items: MenuProps["items"] = [
+    { key: "profile", icon: <IdcardOutlined />, label: "My profile" },
+    { type: "divider" },
+    { key: "signout", icon: <LogoutOutlined />, label: "Log out" },
+  ];
 
   return (
     <div
@@ -43,7 +49,10 @@ export default function Header({ left }: HeaderProps) {
         <Dropdown
           trigger={["click"]}
           placement="bottomRight"
-          menu={{ items, onClick: ({ key }) => key === "signout" && logout() }}
+          menu={{
+            items,
+            onClick: ({ key }) => (key === "signout" ? logout() : router.push("/profile")),
+          }}
         >
           <button type="button" className="profile" aria-label="Account menu" style={{ color: token.colorText }}>
             <Avatar icon={<UserOutlined />} style={{ width: 32, height: 32 }} />

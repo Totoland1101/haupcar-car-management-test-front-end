@@ -5,6 +5,7 @@ import { Badge, Button, Card, Modal, Popconfirm, Table, Tag, Tooltip, Typography
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import { useAuth } from "@/core/context/AuthContext";
+import useDepartment from "@/core/hooks/useDepartment";
 import useUser from "@/core/hooks/useUser";
 import type { User, UserPayload } from "@/core/services/user";
 import { formatDateTime } from "@/core/utils/format";
@@ -13,11 +14,13 @@ import UserForm from "./Components/UserForm";
 export default function UserList() {
   const { user: me } = useAuth();
   const { userList, loading, roleOptions, fetchUsers, fetchRoleOptions, saveUser, deleteUser } = useUser();
+  const { departmentOptions, fetchDepartments } = useDepartment();
   const [editing, setEditing] = useState<{ open: boolean; user: User | null }>({ open: false, user: null });
 
   useEffect(() => {
     fetchUsers();
     fetchRoleOptions();
+    fetchDepartments();
   }, []);
 
   const closeForm = () => setEditing((prev) => ({ ...prev, open: false }));
@@ -46,6 +49,8 @@ export default function UserList() {
       ),
     },
     { title: "Name", dataIndex: "name" },
+    { title: "Job title", key: "jobTitle", render: (_, user) => user.profile.jobTitle ?? "-" },
+    { title: "Department", key: "department", render: (_, user) => user.profile.department?.name ?? "-" },
     {
       title: "Role",
       key: "role",
@@ -119,7 +124,7 @@ export default function UserList() {
             dataSource={userList}
             loading={loading}
             pagination={false}
-            scroll={{ x: 760 }}
+            scroll={{ x: 1000 }}
           />
         </Card>
       </div>
@@ -130,11 +135,13 @@ export default function UserList() {
         footer={null}
         onCancel={closeForm}
         destroyOnHidden
+        width={680}
       >
         <UserForm
           user={editing.user}
           isSelf={!!editing.user && editing.user.id === me?.id}
           roleOptions={roleOptions}
+          departmentOptions={departmentOptions}
           onSubmit={handleSubmit}
           onCancel={closeForm}
         />
