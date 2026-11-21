@@ -31,7 +31,7 @@ const EMPTY_CAR: FormValues = {
   notes: "",
 };
 
-// The API expects null for blank optional fields, not empty strings or undefined.
+// The API wants null for blank optional fields, so empty strings and undefined become null.
 function toPayload(values: FormValues): CarPayload {
   const blankToNull = <T,>(value: T | undefined | ""): T | null =>
     value === undefined || value === "" ? null : value;

@@ -13,7 +13,7 @@ interface PermissionWrapperProps {
 }
 
 // Hides buttons and pages the user's role doesn't allow. The API checks the same
-// permissions, so this only keeps the UI tidy and doesn't secure anything by itself.
+// permissions on every request, so this only changes what the user sees.
 export default function PermissionWrapper({ permission, fallback = null, children }: PermissionWrapperProps) {
   const { hasPermission } = useAuth();
   const codes = Array.isArray(permission) ? permission : [permission];

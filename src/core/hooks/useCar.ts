@@ -33,7 +33,7 @@ const initialState: State = {
 
 const useCar = () => {
   const { state, updateState } = useDataContext();
-  // App.useApp() picks up the current light/dark theme. The static `message` API would not.
+  // The static `message` API ignores the light/dark theme, so use the one from App.useApp().
   const { message } = App.useApp();
   // Only the newest request may write its result. Older ones can finish late when filters change quickly.
   const listRequestID = useRef(0);

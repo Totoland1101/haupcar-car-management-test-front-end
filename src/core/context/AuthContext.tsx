@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback((payload: RegisterPayload) => AuthService.register(payload), []);
 
-  // A full page load clears every bit of the previous user's data held in memory.
+  // A full page load clears the previous user's data from memory.
   const logout = useCallback(() => {
     clearAccessToken();
     window.location.assign("/login");

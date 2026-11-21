@@ -13,7 +13,7 @@ interface LoginValues {
   password: string;
 }
 
-// Only follow ?next= to a page on this site, never to another domain.
+// Follow ?next= only to a page on this site, so a crafted link can't redirect to another domain.
 function safeNext(next: string | null): string {
   if (!next || !next.startsWith("/") || next.startsWith("//") || next.startsWith("/login")) return "/";
   return next;

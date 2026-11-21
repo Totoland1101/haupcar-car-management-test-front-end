@@ -23,7 +23,7 @@ export default function Register() {
   const [submitting, setSubmitting] = useState(false);
   const [doneMessage, setDoneMessage] = useState<string | null>(null);
 
-  // Someone who is already logged in has no reason to be here.
+  // Send anyone who is already logged in to the home page.
   useEffect(() => {
     if (status === "authenticated") router.replace("/");
   }, [status, router]);
