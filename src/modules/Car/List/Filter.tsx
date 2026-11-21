@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button, Input, Select } from "antd";
 import { ReloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { STATUS_OPTIONS } from "@/core/constants/car";
-import type { ListQuery } from "@/core/utils/listQuery";
-import type { QueryChanges } from ".";
+import type { ListQuery, QueryChanges } from "@/core/utils/listQuery";
 
 interface FilterProps {
   query: ListQuery;

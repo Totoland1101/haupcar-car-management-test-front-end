@@ -8,10 +8,13 @@ import CarService, {
   type CarSummary,
 } from "../services/car";
 import type { ResponseError, ServiceResponse } from "../utils/http_response";
+import { DEFAULT_LIST_QUERY, type ListQuery } from "../utils/listQuery";
 
 const namespace = "car";
 
 interface State {
+  /** Search, filters, sorting and page of the car list */
+  listQuery: ListQuery;
   carList: Car[];
   total: number;
   summary: CarSummary | null;
@@ -22,6 +25,7 @@ interface State {
 }
 
 const initialState: State = {
+  listQuery: DEFAULT_LIST_QUERY,
   carList: [],
   total: 0,
   summary: null,
@@ -40,6 +44,7 @@ const useCar = () => {
   const detailRequestID = useRef(0);
 
   const {
+    listQuery,
     carList,
     total,
     summary,
@@ -53,6 +58,8 @@ const useCar = () => {
     (value: Partial<State>) => updateState(value, namespace),
     [updateState]
   );
+
+  const setListQuery = (query: ListQuery) => onChangeState({ listQuery: query });
 
   const fetchCarList = async (params: CarListParams) => {
     const requestID = ++listRequestID.current;
@@ -115,6 +122,8 @@ const useCar = () => {
   };
 
   return {
+    listQuery,
+    setListQuery,
     carList,
     total,
     summary,

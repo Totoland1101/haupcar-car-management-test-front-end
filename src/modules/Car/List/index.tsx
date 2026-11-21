@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button, Card, Empty } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
@@ -9,22 +9,20 @@ import PermissionWrapper from "@/components/PermissionWrapper";
 import { PERMISSIONS } from "@/core/constants/permission";
 import useCar from "@/core/hooks/useCar";
 import type { Car } from "@/core/services/car";
-import { readListQuery, type ListQuery } from "@/core/utils/listQuery";
+import { applyQueryChanges, type QueryChanges } from "@/core/utils/listQuery";
 import DataTable from "./DataTable";
 import Filter from "./Filter";
 import SummaryCards from "./SummaryCards";
 
-export type QueryChanges = Partial<Record<keyof ListQuery, string | number | undefined>>;
-
 export default function CarList() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const query = readListQuery(searchParams);
-  const queryKey = searchParams.toString();
-  const { carList, total, summary, loadingList, fetchCarList, fetchSummary, deleteCar } = useCar();
+  const { carList, total, summary, loadingList, listQuery: query, setListQuery, fetchCarList, fetchSummary, deleteCar } =
+    useCar();
+  const queryKey = JSON.stringify(query);
 
+  // The filters live in shared state, so they are still there after opening a car and coming back.
   useEffect(() => {
-    fetchCarList(readListQuery(new URLSearchParams(queryKey)));
+    fetchCarList(query);
   }, [queryKey]);
 
   useEffect(() => {
@@ -32,13 +30,7 @@ export default function CarList() {
   }, []);
 
   function updateQuery(changes: QueryChanges) {
-    const next = new URLSearchParams(searchParams.toString());
-    for (const [key, value] of Object.entries(changes)) {
-      if (value === undefined || value === "") next.delete(key);
-      else next.set(key, String(value));
-    }
-    const queryString = next.toString();
-    router.push(queryString ? `/?${queryString}` : "/", { scroll: false });
+    setListQuery(applyQueryChanges(query, changes));
   }
 
   async function handleDelete(car: Car) {

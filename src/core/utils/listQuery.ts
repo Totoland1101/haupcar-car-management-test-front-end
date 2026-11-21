@@ -10,18 +10,25 @@ export interface ListQuery {
   pageSize: number;
 }
 
-export const DEFAULT_SORT = { sortBy: "updatedAt", order: "desc" } as const;
+export type QueryChanges = Partial<Record<keyof ListQuery, string | number | undefined>>;
 
-// Filters, sorting and paging live in the URL, so a refresh or the back button keeps them.
-export function readListQuery(searchParams: Pick<URLSearchParams, "get">): ListQuery {
-  const get = (key: string) => searchParams.get(key) || undefined;
-  return {
-    search: get("search") ?? "",
-    status: get("status") as CarStatus | undefined,
-    brand: get("brand"),
-    sortBy: get("sortBy") ?? DEFAULT_SORT.sortBy,
-    order: (get("order") as ListQuery["order"] | undefined) ?? DEFAULT_SORT.order,
-    page: Number(get("page")) || 1,
-    pageSize: Number(get("pageSize")) || 10,
-  };
+export const DEFAULT_LIST_QUERY: ListQuery = {
+  search: "",
+  sortBy: "updatedAt",
+  order: "desc",
+  page: 1,
+  pageSize: 10,
+};
+
+// Applies a change from the filters or the table. Undefined or blank puts a field back to its default.
+export function applyQueryChanges(query: ListQuery, changes: QueryChanges): ListQuery {
+  const next: Record<string, unknown> = { ...query };
+  for (const [key, value] of Object.entries(changes) as [keyof ListQuery, string | number | undefined][]) {
+    if (value === undefined || value === "") {
+      next[key] = DEFAULT_LIST_QUERY[key];
+    } else {
+      next[key] = key === "page" || key === "pageSize" ? Number(value) : value;
+    }
+  }
+  return next as unknown as ListQuery;
 }

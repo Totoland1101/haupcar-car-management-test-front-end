@@ -5,10 +5,9 @@ import PermissionWrapper from "@/components/PermissionWrapper";
 import { PERMISSIONS } from "@/core/constants/permission";
 import type { Car } from "@/core/services/car";
 import { formatDateTime, formatMileage, orDash } from "@/core/utils/format";
-import type { ListQuery } from "@/core/utils/listQuery";
+import type { ListQuery, QueryChanges } from "@/core/utils/listQuery";
 import LicensePlate from "../Components/LicensePlate";
 import StatusTag from "../Components/StatusTag";
-import type { QueryChanges } from ".";
 
 interface DataTableProps {
   query: ListQuery;
