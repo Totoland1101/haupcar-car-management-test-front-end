@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { AuthProvider } from "../context/AuthContext";
 import { DataProvider } from "../context/DataContext";
 import { ThemeModeProvider } from "../context/ThemeContext";
 import type { ThemeMode } from "../constants/theme";
@@ -14,7 +15,9 @@ export default function Providers({
 }) {
   return (
     <ThemeModeProvider initialMode={initialThemeMode}>
-      <DataProvider>{children}</DataProvider>
+      <AuthProvider>
+        <DataProvider>{children}</DataProvider>
+      </AuthProvider>
     </ThemeModeProvider>
   );
 }

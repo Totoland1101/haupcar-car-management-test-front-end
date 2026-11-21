@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Button, Card, Descriptions, Popconfirm, Skeleton, Typography, type DescriptionsProps } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
+import PermissionWrapper from "@/components/PermissionWrapper";
+import { PERMISSIONS } from "@/core/constants/permission";
 import useCar from "@/core/hooks/useCar";
 import { formatDateTime, formatMileage, orDash } from "@/core/utils/format";
 import LicensePlate from "../Components/LicensePlate";
@@ -77,20 +79,24 @@ export default function CarDetail({ id }: { id: string }) {
         breadcrumb={breadcrumb}
         extra={
           <div style={{ display: "flex", gap: 8 }}>
-            <Button icon={<EditOutlined />} onClick={() => router.push(`/cars/${car.id}/edit`)}>
-              Edit
-            </Button>
-            <Popconfirm
-              title="Delete this car?"
-              description="This cannot be undone."
-              okText="Delete"
-              okButtonProps={{ danger: true }}
-              onConfirm={handleDelete}
-            >
-              <Button danger icon={<DeleteOutlined />}>
-                Delete
+            <PermissionWrapper permission={PERMISSIONS.CAR_UPDATE}>
+              <Button icon={<EditOutlined />} onClick={() => router.push(`/cars/${car.id}/edit`)}>
+                Edit
               </Button>
-            </Popconfirm>
+            </PermissionWrapper>
+            <PermissionWrapper permission={PERMISSIONS.CAR_DELETE}>
+              <Popconfirm
+                title="Delete this car?"
+                description="This cannot be undone."
+                okText="Delete"
+                okButtonProps={{ danger: true }}
+                onConfirm={handleDelete}
+              >
+                <Button danger icon={<DeleteOutlined />}>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </PermissionWrapper>
           </div>
         }
       />

@@ -14,7 +14,27 @@ html[data-theme='dark'] body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   padding: 0 24px;
+}
+
+.app-nav {
+  flex: 1;
+  min-width: 0;
+  border-bottom: none;
+  background: transparent;
+}
+
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.app-user-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .app-brand {
@@ -23,6 +43,7 @@ html[data-theme='dark'] body {
   gap: 10px;
   font-size: 18px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .page {
@@ -125,7 +146,69 @@ html[data-theme='dark'] body {
   gap: 20px;
 }
 
+.full-page-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.login-brand h3 {
+  margin: 8px 0 4px;
+}
+
+/* Checkbox.Group is a flex container, so the grid needs an explicit width to use the full row. */
+.permission-groups {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.permission-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.permission-group .ant-checkbox-wrapper {
+  margin-inline-start: 0;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
 @media (max-width: 600px) {
+  .app-brand-name,
+  .app-user-name {
+    display: none;
+  }
+
   .page {
     padding: 16px;
   }

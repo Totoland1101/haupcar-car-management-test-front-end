@@ -1,6 +1,8 @@
 import { useRouter } from "next/navigation";
 import { Button, Empty, Popconfirm, Table, Tooltip, type TableProps } from "antd";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import PermissionWrapper from "@/components/PermissionWrapper";
+import { PERMISSIONS } from "@/core/constants/permission";
 import type { Car } from "@/core/services/car";
 import { formatDateTime, formatMileage, orDash } from "@/core/utils/format";
 import type { ListQuery } from "@/core/utils/listQuery";
@@ -111,25 +113,29 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
               onClick={() => router.push(`/cars/${car.id}`)}
             />
           </Tooltip>
-          <Tooltip title="Edit">
-            <Button
-              type="text"
-              icon={<EditOutlined />}
-              aria-label="Edit"
-              onClick={() => router.push(`/cars/${car.id}/edit`)}
-            />
-          </Tooltip>
-          <Popconfirm
-            title="Delete this car?"
-            description={`${car.registrationNumber} ${car.province} will be removed for good.`}
-            okText="Delete"
-            okButtonProps={{ danger: true }}
-            onConfirm={() => onDelete(car)}
-          >
-            <Tooltip title="Delete">
-              <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete" />
+          <PermissionWrapper permission={PERMISSIONS.CAR_UPDATE}>
+            <Tooltip title="Edit">
+              <Button
+                type="text"
+                icon={<EditOutlined />}
+                aria-label="Edit"
+                onClick={() => router.push(`/cars/${car.id}/edit`)}
+              />
             </Tooltip>
-          </Popconfirm>
+          </PermissionWrapper>
+          <PermissionWrapper permission={PERMISSIONS.CAR_DELETE}>
+            <Popconfirm
+              title="Delete this car?"
+              description={`${car.registrationNumber} ${car.province} will be removed for good.`}
+              okText="Delete"
+              okButtonProps={{ danger: true }}
+              onConfirm={() => onDelete(car)}
+            >
+              <Tooltip title="Delete">
+                <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete" />
+              </Tooltip>
+            </Popconfirm>
+          </PermissionWrapper>
         </span>
       ),
     },

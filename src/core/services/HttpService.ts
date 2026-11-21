@@ -1,3 +1,5 @@
+import { clearAccessToken, getAccessToken } from "../utils/token";
+
 // The Express API. Set NEXT_PUBLIC_ENDPOINT_URL in .env.local to point somewhere else.
 // It is inlined into the browser bundle at build time.
 const baseURL: string = `${process.env.NEXT_PUBLIC_ENDPOINT_URL || "http://localhost:4000"}/api`;
@@ -36,11 +38,16 @@ async function request<T>(
   path: string,
   { params, body }: { params?: QueryParams; body?: unknown } = {}
 ): Promise<HttpResponseData<T>> {
+  const token = getAccessToken();
+  const headers: Record<string, string> = {};
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  if (token) headers.Authorization = `Bearer ${token}`;
+
   let res: Response;
   try {
     res = await fetch(buildURL(path, params), {
       method,
-      headers: body === undefined ? undefined : { "Content-Type": "application/json" },
+      headers,
       body: body === undefined ? undefined : JSON.stringify(body),
       cache: "no-store",
     });
@@ -50,6 +57,17 @@ async function request<T>(
   }
 
   const data = res.status === 204 ? null : await res.json().catch(() => null);
+
+  // The token expired or the account was disabled. Go back to the login page, and return
+  // to this page after logging in. A 401 without a token is a failed login, so it stays here.
+  if (res.status === 401 && token) {
+    clearAccessToken();
+    if (!window.location.pathname.startsWith("/login")) {
+      const next = window.location.pathname + window.location.search;
+      window.location.assign(`/login?next=${encodeURIComponent(next)}`);
+    }
+  }
+
   if (!res.ok) {
     throw new HttpError(res.status, `Request failed with status ${res.status}`, data);
   }

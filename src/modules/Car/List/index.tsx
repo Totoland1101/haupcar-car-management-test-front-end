@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Card, Empty } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
+import PermissionWrapper from "@/components/PermissionWrapper";
+import { PERMISSIONS } from "@/core/constants/permission";
 import useCar from "@/core/hooks/useCar";
 import type { Car } from "@/core/services/car";
 import { readListQuery, type ListQuery } from "@/core/utils/listQuery";
@@ -59,9 +61,11 @@ export default function CarList() {
         title="Cars"
         subtitle="Every company car recorded in the system"
         extra={
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
-            Add car
-          </Button>
+          <PermissionWrapper permission={PERMISSIONS.CAR_CREATE}>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
+              Add car
+            </Button>
+          </PermissionWrapper>
         }
       />
 
@@ -74,9 +78,11 @@ export default function CarList() {
       <Card>
         {isEmptyRegistry && !hasFilters ? (
           <Empty description="No cars recorded yet" style={{ padding: "32px 0" }}>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
-              Add the first car
-            </Button>
+            <PermissionWrapper permission={PERMISSIONS.CAR_CREATE}>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
+                Add the first car
+              </Button>
+            </PermissionWrapper>
           </Empty>
         ) : (
           <>

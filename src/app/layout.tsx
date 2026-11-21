@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import AppLayout from "@/components/Layouts";
 import { THEME_COOKIE, type ThemeMode } from "@/core/constants/theme";
 import Providers from "@/core/services/providers";
 import "@/styles/globals.css";
@@ -33,9 +32,7 @@ export default async function RootLayout({
       <body>
         {/* Collects Ant Design's CSS-in-JS styles during server rendering. */}
         <AntdRegistry>
-          <Providers initialThemeMode={initialThemeMode}>
-            <AppLayout>{children}</AppLayout>
-          </Providers>
+          <Providers initialThemeMode={initialThemeMode}>{children}</Providers>
         </AntdRegistry>
       </body>
     </html>
