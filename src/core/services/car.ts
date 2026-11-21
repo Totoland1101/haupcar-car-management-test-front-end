@@ -4,6 +4,7 @@ import Http from "./HttpService";
 const { HttpService } = Http;
 
 export type CarStatus = "available" | "in_use" | "maintenance" | "inactive";
+export type FuelType = "gasoline" | "diesel" | "hybrid" | "plug_in_hybrid" | "electric" | "lpg" | "ngv";
 
 export interface Car {
   id: number;
@@ -11,6 +12,8 @@ export interface Car {
   province: string;
   brand: string;
   model: string;
+  /** null only for cars added before the field existed */
+  fuelType: FuelType | null;
   year: number | null;
   color: string | null;
   /** Current reading, in kilometres */

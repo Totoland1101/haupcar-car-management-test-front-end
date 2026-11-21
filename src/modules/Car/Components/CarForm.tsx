@@ -1,8 +1,8 @@
 import { useState } from "react";
 import dayjs, { type Dayjs } from "dayjs";
 import { AutoComplete, Button, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select } from "antd";
-import { COMMON_BRANDS, PROVINCES, STATUS_OPTIONS, modelsForBrand } from "@/core/constants/car";
-import type { Car, CarPayload, CarStatus } from "@/core/services/car";
+import { COMMON_BRANDS, FUEL_OPTIONS, PROVINCES, STATUS_OPTIONS, modelsForBrand } from "@/core/constants/car";
+import type { Car, CarPayload, CarStatus, FuelType } from "@/core/services/car";
 import type { ResponseError } from "@/core/utils/http_response";
 
 const maxYear = new Date().getFullYear() + 1;
@@ -13,6 +13,7 @@ interface FormValues {
   province?: string;
   brand: string;
   model: string;
+  fuelType?: FuelType | null;
   year: number | null;
   color: string | null;
   mileage: number | null;
@@ -27,6 +28,7 @@ const EMPTY_CAR: FormValues = {
   province: undefined,
   brand: "",
   model: "",
+  fuelType: undefined,
   year: null,
   color: "",
   mileage: null,
@@ -45,6 +47,7 @@ function toPayload(values: FormValues): CarPayload {
     province: values.province ?? "",
     brand: values.brand,
     model: values.model,
+    fuelType: values.fuelType ?? null,
     year: blankToNull(values.year),
     color: blankToNull(values.color?.trim()),
     mileage: blankToNull(values.mileage),
@@ -165,6 +168,11 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
         </Col>
 
         <Col xs={24} sm={8} xl={4}>
+          <Form.Item label="Fuel type" name="fuelType" rules={[{ required: true, message: "Fuel type is required" }]}>
+            <Select options={FUEL_OPTIONS} placeholder="Select fuel" />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={8} xl={4}>
           <Form.Item label="Year" name="year">
             <InputNumber
               placeholder={String(maxYear - 1)}
@@ -197,7 +205,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={12} xl={6}>
+        <Col xs={24} sm={8} xl={4}>
           <Form.Item
             label="Registered on"
             name="registeredOn"
@@ -212,7 +220,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={12} xl={6}>
+        <Col xs={24} sm={8} xl={4}>
           <Form.Item
             label="Mileage at registration"
             name="registeredMileage"

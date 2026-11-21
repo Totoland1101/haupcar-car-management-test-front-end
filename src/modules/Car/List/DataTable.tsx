@@ -3,6 +3,7 @@ import { Button, Empty, Popconfirm, Table, Tooltip, type TableProps } from "antd
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import PermissionWrapper from "@/components/PermissionWrapper";
 import { PERMISSIONS } from "@/core/constants/permission";
+import { FUEL_TYPES } from "@/core/constants/car";
 import type { Car } from "@/core/services/car";
 import { formatDate, formatDateTime, formatMileage, orDash } from "@/core/utils/format";
 import type { ListQuery, QueryChanges } from "@/core/utils/listQuery";
@@ -92,6 +93,13 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       key: "color",
       dataIndex: "color",
       render: orDash,
+    },
+    {
+      title: "Fuel",
+      responsive: ["xl"],
+      key: "fuelType",
+      dataIndex: "fuelType",
+      render: (fuel: Car["fuelType"]) => (fuel ? FUEL_TYPES[fuel] : "-"),
     },
     {
       title: "Mileage",

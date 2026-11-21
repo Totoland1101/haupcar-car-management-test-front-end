@@ -1,4 +1,4 @@
-import type { CarStatus } from "../services/car";
+import type { CarStatus, FuelType } from "../services/car";
 
 export const CAR_STATUS: Record<CarStatus, { label: string; color: string }> = {
   available: { label: "Available", color: "green" },
@@ -6,6 +6,21 @@ export const CAR_STATUS: Record<CarStatus, { label: string; color: string }> = {
   maintenance: { label: "Maintenance", color: "orange" },
   inactive: { label: "Inactive", color: "default" },
 };
+
+export const FUEL_TYPES: Record<FuelType, string> = {
+  gasoline: "Gasoline",
+  diesel: "Diesel",
+  hybrid: "Hybrid",
+  plug_in_hybrid: "Plug-in hybrid",
+  electric: "Electric",
+  lpg: "LPG",
+  ngv: "NGV",
+};
+
+export const FUEL_OPTIONS = (Object.keys(FUEL_TYPES) as FuelType[]).map((value) => ({
+  value,
+  label: FUEL_TYPES[value],
+}));
 
 export const STATUS_OPTIONS = (Object.keys(CAR_STATUS) as CarStatus[]).map((value) => ({
   value,

@@ -6,6 +6,7 @@ import { Button, Card, Descriptions, Popconfirm, Skeleton, Typography, type Desc
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import PermissionWrapper from "@/components/PermissionWrapper";
+import { FUEL_TYPES } from "@/core/constants/car";
 import { PERMISSIONS } from "@/core/constants/permission";
 import { useAuth } from "@/core/context/AuthContext";
 import useCar from "@/core/hooks/useCar";
@@ -59,6 +60,7 @@ export default function CarDetail({ id }: { id: string }) {
     { key: "model", label: "Model", children: car.model },
     { key: "year", label: "Year", children: orDash(car.year) },
     { key: "color", label: "Color", children: orDash(car.color) },
+    { key: "fuel", label: "Fuel", children: car.fuelType ? FUEL_TYPES[car.fuelType] : "-" },
     { key: "mileage", label: "Current mileage", children: formatMileage(car.mileage) },
     { key: "registeredOn", label: "Registered on", children: formatDate(car.registeredOn) },
     { key: "registeredMileage", label: "Mileage at registration", children: formatMileage(car.registeredMileage) },
@@ -114,7 +116,8 @@ export default function CarDetail({ id }: { id: string }) {
               {car.brand} {car.model}
             </Typography.Title>
             <Typography.Text type="secondary">
-              {[car.year, car.color].filter(Boolean).join(" · ") || "No year or color recorded"}
+              {[car.year, car.color, car.fuelType && FUEL_TYPES[car.fuelType]].filter(Boolean).join(" · ") ||
+                "No year, color or fuel recorded"}
             </Typography.Text>
             <div style={{ marginTop: 8 }}>
               <StatusTag status={car.status} />
