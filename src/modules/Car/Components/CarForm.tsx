@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dayjs, { type Dayjs } from "dayjs";
 import { AutoComplete, Button, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select } from "antd";
-import { COMMON_BRANDS, PROVINCES, STATUS_OPTIONS } from "@/core/constants/car";
+import { COMMON_BRANDS, PROVINCES, STATUS_OPTIONS, modelsForBrand } from "@/core/constants/car";
 import type { Car, CarPayload, CarStatus } from "@/core/services/car";
 import type { ResponseError } from "@/core/utils/http_response";
 
@@ -71,10 +71,25 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
   const [form] = Form.useForm<FormValues>();
   const [submitting, setSubmitting] = useState(false);
   const brand = Form.useWatch("brand", form) ?? "";
+  const model = Form.useWatch("model", form) ?? "";
 
   const brandOptions = COMMON_BRANDS.filter(
     (name) => name !== brand && name.toLowerCase().includes(brand.trim().toLowerCase())
   ).map((name) => ({ value: name }));
+
+  const brandModels = modelsForBrand(brand);
+  const modelOptions = brandModels
+    .filter((name) => name !== model && name.toLowerCase().includes(model.trim().toLowerCase()))
+    .map((name) => ({ value: name }));
+
+  // A model from another brand no longer fits. A model typed for a brand that isn't in
+  // the list is left alone.
+  function handleValuesChange(changed: Partial<FormValues>) {
+    if (!("brand" in changed)) return;
+    const models = modelsForBrand(changed.brand);
+    const current = form.getFieldValue("model");
+    if (models.length && current && !models.includes(current)) form.setFieldValue("model", "");
+  }
 
   async function handleFinish(values: FormValues) {
     setSubmitting(true);
@@ -104,6 +119,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
         registeredOn: initialValues ? dayjs(initialValues.registeredOn) : dayjs(),
       }}
       onFinish={handleFinish}
+      onValuesChange={handleValuesChange}
       scrollToFirstError
       requiredMark="optional"
     >
@@ -134,8 +150,17 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
         <Col xs={24} md={12} xl={6}>
-          <Form.Item label="Model" name="model" rules={[required("Model"), { max: 50 }]}>
-            <Input placeholder="e.g. Yaris Ativ" maxLength={50} />
+          <Form.Item
+            label="Model"
+            name="model"
+            rules={[required("Model"), { max: 50 }]}
+            extra={brand.trim() ? undefined : "Pick a brand first"}
+          >
+            <AutoComplete
+              options={modelOptions}
+              disabled={!brand.trim()}
+              placeholder={brandModels.length ? `e.g. ${brandModels[0]}` : "e.g. Yaris Ativ"}
+            />
           </Form.Item>
         </Col>
 
