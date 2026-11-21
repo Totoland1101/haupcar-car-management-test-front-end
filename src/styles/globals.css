@@ -263,6 +263,23 @@ html[data-theme='dark'] .mobile-logo {
   transition: border-color 0.15s;
 }
 
+/* A table cell holding several lines, used for the phone-only columns */
+.cell-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.cell-muted {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.show-xs {
+  display: none;
+}
+
 .clickable-row {
   cursor: pointer;
 }
@@ -499,9 +516,19 @@ html[data-theme='dark'] .side-layout-card {
   }
 }
 
+@media (max-width: 575px) {
+  .show-xs {
+    display: inline;
+  }
+}
+
 @media (max-width: 768px) {
   .page {
     padding: 8px;
+  }
+
+  .page .ant-card-body {
+    padding: 12px;
   }
 
   .container-header {

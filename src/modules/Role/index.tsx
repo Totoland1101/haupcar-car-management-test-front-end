@@ -52,6 +52,7 @@ export default function RoleList() {
     {
       title: "Permissions",
       dataIndex: "permissions",
+      responsive: ["md"],
       render: (codes: Role["permissions"]) =>
         codes.length ? (
           <div className="tag-list">
@@ -63,7 +64,7 @@ export default function RoleList() {
           <Typography.Text type="secondary">None</Typography.Text>
         ),
     },
-    { title: "Users", dataIndex: "userCount", align: "right", width: 80 },
+    { title: "Users", dataIndex: "userCount", align: "right", width: 80, responsive: ["sm"] },
     {
       title: "",
       key: "actions",
@@ -125,7 +126,7 @@ export default function RoleList() {
             dataSource={roleList}
             loading={loading}
             pagination={false}
-            scroll={{ x: 760 }}
+            // No scroll width here, so the permission tags wrap.
           />
         </Card>
       </div>

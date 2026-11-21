@@ -40,15 +40,26 @@ export default function Approval() {
   }
 
   const columns: TableProps<User>["columns"] = [
-    { title: "Name", dataIndex: "name" },
-    { title: "Username", dataIndex: "username" },
-    { title: "Email", key: "email", render: (_: unknown, user: User) => user.profile.email ?? "-" },
-    { title: "Phone", key: "phone", render: (_: unknown, user: User) => user.profile.phone ?? "-" },
-    { title: "Registered", dataIndex: "createdAt", render: formatDateTime },
+    {
+      title: "Name",
+      dataIndex: "name",
+      render: (name: string, user: User) => (
+        <div className="cell-stack">
+          <span>{name}</span>
+          {/* On a phone the username column is hidden, so show it here. */}
+          <span className="cell-muted show-xs">{user.username}</span>
+        </div>
+      ),
+    },
+    { title: "Username", dataIndex: "username", responsive: ["sm"] },
+    { title: "Email", key: "email", responsive: ["md"], render: (_: unknown, user: User) => user.profile.email ?? "-" },
+    { title: "Phone", key: "phone", responsive: ["lg"], render: (_: unknown, user: User) => user.profile.phone ?? "-" },
+    { title: "Registered", dataIndex: "createdAt", responsive: ["sm"], render: formatDateTime },
     ...(status === "rejected"
       ? [
           {
             title: "Rejected",
+            responsive: ["md"] as ("md")[],
             key: "reviewed",
             render: (_: unknown, user: User) => (
               <>
@@ -112,7 +123,7 @@ export default function Approval() {
             dataSource={registrationList}
             loading={loading}
             pagination={false}
-            scroll={{ x: 900 }}
+            scroll={{ x: "max-content" }}
             locale={{
               emptyText: (
                 <Empty

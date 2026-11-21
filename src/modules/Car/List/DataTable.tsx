@@ -47,7 +47,23 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       render: (_, car) => <LicensePlate number={car.registrationNumber} province={car.province} />,
     },
     {
+      // Phones only: the columns hidden there, in one cell
+      title: "Car",
+      key: "summary",
+      responsive: ["xs"],
+      render: (_, car) => (
+        <div className="cell-stack">
+          <span>
+            {car.brand} {car.model}
+          </span>
+          <span className="cell-muted">{formatMileage(car.mileage)}</span>
+          <StatusTag status={car.status} />
+        </div>
+      ),
+    },
+    {
       title: "Brand",
+      responsive: ["sm"],
       key: "brand",
       dataIndex: "brand",
       sorter: true,
@@ -55,6 +71,7 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
     },
     {
       title: "Model",
+      responsive: ["sm"],
       key: "model",
       dataIndex: "model",
       sorter: true,
@@ -62,6 +79,7 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
     },
     {
       title: "Year",
+      responsive: ["lg"],
       key: "year",
       dataIndex: "year",
       sorter: true,
@@ -70,12 +88,14 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
     },
     {
       title: "Color",
+      responsive: ["xl"],
       key: "color",
       dataIndex: "color",
       render: orDash,
     },
     {
       title: "Mileage",
+      responsive: ["lg"],
       key: "mileage",
       dataIndex: "mileage",
       align: "right",
@@ -85,6 +105,7 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
     },
     {
       title: "Registered",
+      responsive: ["xl"],
       key: "registeredOn",
       dataIndex: "registeredOn",
       sorter: true,
@@ -93,12 +114,14 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
     },
     {
       title: "Status",
+      responsive: ["sm"],
       key: "status",
       dataIndex: "status",
       render: (status) => <StatusTag status={status} />,
     },
     {
       title: "Last updated",
+      responsive: ["lg"],
       key: "updatedAt",
       dataIndex: "updatedAt",
       sorter: true,
@@ -108,6 +131,8 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
     {
       title: "",
       key: "actions",
+      // On a phone, tapping the row opens the car, which has Edit and Delete.
+      responsive: ["sm"],
       align: "right",
       onCell: () => ({ onClick: (e) => e.stopPropagation() }),
       render: (_, car) => (
@@ -152,7 +177,7 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       columns={columns}
       dataSource={cars}
       loading={loading}
-      scroll={{ x: 960 }}
+      scroll={{ x: "max-content" }}
       onChange={handleTableChange}
       onRow={(car) => ({
         className: "clickable-row",

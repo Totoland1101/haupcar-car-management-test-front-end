@@ -51,6 +51,7 @@ export default function UserList() {
     {
       title: "Username",
       dataIndex: "username",
+      responsive: ["sm"],
       render: (username: string, user) => (
         <>
           {username}
@@ -58,23 +59,47 @@ export default function UserList() {
         </>
       ),
     },
-    { title: "Name", dataIndex: "name" },
-    { title: "Job title", key: "jobTitle", render: (_, user) => user.profile.jobTitle ?? "-" },
-    { title: "Department", key: "department", render: (_, user) => user.profile.department?.name ?? "-" },
+    {
+      // Phones only: name, username and role in one cell
+      title: "Person",
+      key: "summary",
+      responsive: ["xs"],
+      render: (_, user) => (
+        <div className="cell-stack">
+          <span>
+            {user.name}
+            {user.id === me?.id && <Tag style={{ marginLeft: 8 }}>You</Tag>}
+          </span>
+          <span className="cell-muted">{user.username}</span>
+          {user.role && <Tag color="blue">{user.role.name}</Tag>}
+        </div>
+      ),
+    },
+    { title: "Name", dataIndex: "name", responsive: ["sm"] },
+    { title: "Job title", key: "jobTitle", responsive: ["lg"], render: (_, user) => user.profile.jobTitle ?? "-" },
+    {
+      title: "Department",
+      key: "department",
+      responsive: ["lg"],
+      render: (_, user) => user.profile.department?.name ?? "-",
+    },
     {
       title: "Role",
       key: "role",
+      responsive: ["md"],
       render: (_, user) => (user.role ? <Tag color="blue">{user.role.name}</Tag> : "-"),
     },
     {
       title: "Status",
       dataIndex: "isActive",
+      responsive: ["md"],
       render: (isActive: boolean) =>
         isActive ? <Badge status="success" text="Active" /> : <Badge status="default" text="Disabled" />,
     },
     {
       title: "Last login",
       dataIndex: "lastLoginAt",
+      responsive: ["xl"],
       render: (value: string | null) => (value ? formatDateTime(value) : "Never"),
     },
     {
@@ -137,7 +162,7 @@ export default function UserList() {
             dataSource={userList}
             loading={loading}
             pagination={false}
-            scroll={{ x: 1000 }}
+            scroll={{ x: "max-content" }}
           />
         </Card>
       </div>

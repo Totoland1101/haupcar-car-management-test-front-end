@@ -19,6 +19,9 @@ export default function Sidebar() {
       width={240}
       collapsedWidth={80}
       collapsible
+      // Folds itself up on tablets and small laptops, so the page gets the room.
+      breakpoint="lg"
+      onBreakpoint={setCollapsed}
       collapsed={collapsed}
       onCollapse={setCollapsed}
       trigger={
