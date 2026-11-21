@@ -141,10 +141,10 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
                 validator: (_, value?: string) =>
                   !value?.trim() || THAI_PLATE.test(value.trim())
                     ? Promise.resolve()
-                    : Promise.reject(new Error("Use a Thai plate, e.g. 1กข 1234 or กข 1234")),
+                    : Promise.reject(new Error("Use a Thai plate, e.g. 1กข 1234, กข 1234 or 70-1234")),
               },
             ]}
-            extra="As shown on the plate, e.g. 1กข 1234"
+            extra="As shown on the plate, e.g. 1กข 1234 or 70-1234"
           >
             <Input placeholder="1กข 1234" maxLength={20} autoFocus />
           </Form.Item>
