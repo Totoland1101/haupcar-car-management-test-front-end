@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  background: #f4f6fa;
+}
+
+html[data-theme='dark'] body {
+  background: #000;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 20px;
+}
+
+.page-header h3 {
+  margin: 0;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toolbar .search {
+  flex: 1 1 260px;
+  max-width: 360px;
+}
+
+.toolbar .filter {
+  width: 170px;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+/* Styled after a Thai private-car plate: black text on white, province underneath. */
+.plate {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 112px;
+  padding: 2px 10px 3px;
+  background: #fff;
+  color: #111;
+  border: 2px solid #111;
+  border-radius: 6px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.plate-number {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.plate-province {
+  font-size: 11px;
+}
+
+.plate-large {
+  min-width: 190px;
+  padding: 6px 18px 8px;
+  border-width: 3px;
+  border-radius: 10px;
+}
+
+.plate-large .plate-number {
+  font-size: 30px;
+}
+
+.plate-large .plate-province {
+  font-size: 15px;
+}
+
+.car-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 16px;
+  }
+
+  .app-header {
+    padding: 0 16px;
+  }
+
+  .toolbar .search,
+  .toolbar .filter {
+    flex: 1 1 100%;
+    max-width: none;
+    width: auto;
+  }
+}
