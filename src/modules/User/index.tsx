@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Badge, Button, Card, Modal, Popconfirm, Table, Tag, Tooltip, type TableProps } from "antd";
+import { Badge, Button, Card, Modal, Popconfirm, Table, Tag, Tooltip, Typography, type TableProps } from "antd";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import { useAuth } from "@/core/context/AuthContext";
@@ -67,10 +67,9 @@ export default function UserList() {
       key: "actions",
       align: "right",
       render: (_, user) => (
-        <span style={{ whiteSpace: "nowrap" }}>
+        <span className="row-actions">
           <Tooltip title="Edit">
             <Button
-              type="text"
               icon={<EditOutlined />}
               aria-label="Edit"
               onClick={() => setEditing({ open: true, user })}
@@ -78,7 +77,7 @@ export default function UserList() {
           </Tooltip>
           {user.id === me?.id ? (
             <Tooltip title="You can't delete your own account">
-              <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete" disabled />
+              <Button danger icon={<DeleteOutlined />} aria-label="Delete" disabled />
             </Tooltip>
           ) : (
             <Popconfirm
@@ -89,7 +88,7 @@ export default function UserList() {
               onConfirm={() => handleDelete(user)}
             >
               <Tooltip title="Delete">
-                <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete" />
+                <Button danger icon={<DeleteOutlined />} aria-label="Delete" />
               </Tooltip>
             </Popconfirm>
           )}
@@ -100,26 +99,30 @@ export default function UserList() {
 
   return (
     <>
-      <PageHeader
-        title="Users"
-        subtitle="People who can log in, and the role each one has"
-        extra={
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => setEditing({ open: true, user: null })}>
-            Add user
-          </Button>
-        }
-      />
+      <PageHeader title="Users" subtitle="People who can log in, and the role each one has" />
 
-      <Card>
-        <Table<User>
-          rowKey="id"
-          columns={columns}
-          dataSource={userList}
-          loading={loading}
-          pagination={false}
-          scroll={{ x: 760 }}
-        />
-      </Card>
+      <div className="page-stack">
+        <Card size="small" className="toolbar-card">
+          <div className="toolbar">
+            <Typography.Text type="secondary">{userList.length} users</Typography.Text>
+            <div className="toolbar-extra">
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => setEditing({ open: true, user: null })}>
+                Add user
+              </Button>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <Table<User>
+            rowKey="id"
+            columns={columns}
+            dataSource={userList}
+            loading={loading}
+            pagination={false}
+            scroll={{ x: 760 }}
+          />
+        </Card>
+      </div>
 
       <Modal
         open={editing.open}

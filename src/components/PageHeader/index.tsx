@@ -27,7 +27,7 @@ export default function PageHeader({ title, subtitle, breadcrumb, extra }: PageH
       )}
       <div className="page-header">
         <div>
-          <Typography.Title level={3}>{title}</Typography.Title>
+          <Typography.Title level={4}>{title}</Typography.Title>
           {subtitle && <Typography.Text type="secondary">{subtitle}</Typography.Text>}
         </div>
         {extra}

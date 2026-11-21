@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Alert, Button, Card, Form, Input, Typography } from "antd";
+import { Alert, Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import SideLayout from "@/components/Layouts/SideLayout";
 import { useAuth } from "@/core/context/AuthContext";
 
 interface LoginValues {
@@ -41,28 +42,30 @@ export default function Login() {
   }
 
   return (
-    <div className="login-page">
-      <Card className="login-card">
-        <div className="login-brand">
-          <img src="/car.svg" alt="" width={44} height={44} />
-          <Typography.Title level={3}>haupcar-management</Typography.Title>
-          <Typography.Text type="secondary">Log in to manage the company&apos;s cars</Typography.Text>
-        </div>
+    <SideLayout>
+      <div className="login-title">Log in</div>
 
-        {error && <Alert type="error" showIcon title={error} style={{ marginBottom: 16 }} />}
+      {error && <Alert type="error" showIcon title={error} style={{ marginBottom: 16 }} />}
 
-        <Form<LoginValues> layout="vertical" requiredMark={false} onFinish={handleFinish}>
-          <Form.Item label="Username" name="username" rules={[{ required: true, message: "Enter your username" }]}>
-            <Input prefix={<UserOutlined />} autoComplete="username" autoFocus size="large" />
-          </Form.Item>
-          <Form.Item label="Password" name="password" rules={[{ required: true, message: "Enter your password" }]}>
-            <Input.Password prefix={<LockOutlined />} autoComplete="current-password" size="large" />
-          </Form.Item>
-          <Button type="primary" htmlType="submit" size="large" block loading={submitting}>
+      <Form<LoginValues>
+        name="login_form"
+        labelCol={{ flex: "96px" }}
+        labelAlign="left"
+        requiredMark={false}
+        onFinish={handleFinish}
+      >
+        <Form.Item label="Username" name="username" rules={[{ required: true, message: "Username is required" }]}>
+          <Input prefix={<UserOutlined />} autoComplete="username" autoFocus />
+        </Form.Item>
+        <Form.Item label="Password" name="password" rules={[{ required: true, message: "Password is required" }]}>
+          <Input.Password prefix={<LockOutlined />} autoComplete="current-password" />
+        </Form.Item>
+        <Form.Item style={{ marginBottom: 4 }}>
+          <Button type="primary" htmlType="submit" block loading={submitting} style={{ marginTop: 10 }}>
             Log in
           </Button>
-        </Form>
-      </Card>
-    </div>
+        </Form.Item>
+      </Form>
+    </SideLayout>
   );
 }

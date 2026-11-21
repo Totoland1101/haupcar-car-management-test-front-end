@@ -1,58 +1,209 @@
+/* Colours match the Ant Design theme in core/constants/theme. */
+:root {
+  --primary: #124699;
+  --secondary: #2b2c30;
+  --header-height: 50px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  background: #f4f6fa;
+  background: #f5f5f5;
+  font-family: var(--font-prompt), sans-serif;
 }
 
 html[data-theme='dark'] body {
   background: #000;
 }
 
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+/* ===== Layout ===== */
+
+.layout-container {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.main-content {
+  height: calc(100dvh - var(--header-height));
+  overflow: auto;
+}
+
+.page {
+  padding: 16px;
+}
+
+/* ===== Sidebar ===== */
+
+.app-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.sider-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sider-logo:hover {
+  color: #fff;
+}
+
+.sider-logo.collapsed {
+  justify-content: center;
+  padding: 16px 0;
+}
+
+.sider-menu {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+.sider-menu .ant-menu,
+.mobile-nav .ant-menu {
+  border-inline-end: none;
+}
+
+/* Collapse button at the bottom of the sidebar */
+.arrow-menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  padding: 8px 16px;
+  color: #fff;
+}
+
+.arrow-menu-collapsed {
+  justify-content: center;
+}
+
+.arrow-menu-collapsed .anticon {
+  transform: rotate(180deg);
+}
+
+.arrow-menu .anticon {
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobile-nav-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 0 24px;
 }
 
-.app-nav {
-  flex: 1;
-  min-width: 0;
-  border-bottom: none;
-  background: transparent;
+.mobile-nav-title .sider-logo {
+  padding: 8px 0;
 }
 
-.app-header-actions {
+/* Thin dark scrollbar inside the sidebar */
+.custom-scrollbar.dark::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar.dark::-webkit-scrollbar-track {
+  background: rgba(43, 44, 48, 0.1);
+}
+
+.custom-scrollbar.dark::-webkit-scrollbar-thumb {
+  background: #000;
+}
+
+/* ===== Header ===== */
+
+.container-header {
+  position: relative;
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: flex-end;
+  width: 100%;
+  height: var(--header-height);
+  padding: 0 16px;
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
 }
 
-.app-user-button {
-  display: inline-flex;
+.container-header.justify-between {
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.app-brand {
+.mobile-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 18px;
-  font-weight: 600;
+  gap: 8px;
+  color: var(--secondary);
+  font-weight: 500;
   white-space: nowrap;
 }
 
-.page {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-  box-sizing: border-box;
+html[data-theme='dark'] .mobile-logo {
+  color: #fff;
 }
+
+.container-header .action {
+  display: flex;
+  align-items: center;
+}
+
+.container-header .action-flex {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 20px;
+  border-right: 1px solid;
+}
+
+.container-header .profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.container-header .profile .name {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.container-header .profile .organization {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.container-header .profile-meta {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  align-self: flex-end;
+  padding-bottom: 6px;
+}
+
+.container-header .profile-meta .ant-tag {
+  margin: 0;
+}
+
+/* ===== Page parts ===== */
 
 .page-header {
   display: flex;
@@ -60,11 +211,44 @@ html[data-theme='dark'] body {
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  margin: 8px 0 20px;
+  margin: 4px 0 16px;
 }
 
-.page-header h3 {
+.page-header h4 {
   margin: 0;
+}
+
+/* Cards stacked down the page: a toolbar card, then the table card */
+.page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar .search {
+  flex: 1 1 240px;
+  max-width: 320px;
+}
+
+.toolbar .filter {
+  width: 170px;
+}
+
+.toolbar-extra {
+  margin-left: auto;
+}
+
+.row-actions {
+  display: inline-flex;
+  gap: 8px;
+  white-space: nowrap;
 }
 
 .stat-grid {
@@ -79,25 +263,18 @@ html[data-theme='dark'] body {
   transition: border-color 0.15s;
 }
 
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.toolbar .search {
-  flex: 1 1 260px;
-  max-width: 360px;
-}
-
-.toolbar .filter {
-  width: 170px;
-}
-
 .clickable-row {
   cursor: pointer;
 }
+
+.full-page-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+/* ===== Licence plate ===== */
 
 /* Styled after a Thai private-car plate: black text on white, province underneath. */
 .plate {
@@ -116,7 +293,7 @@ html[data-theme='dark'] body {
 
 .plate-number {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.5px;
 }
 
@@ -146,38 +323,64 @@ html[data-theme='dark'] body {
   gap: 20px;
 }
 
-.full-page-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 60vh;
+/* ===== Login (SideLayout) ===== */
+
+.side-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.08), transparent 45%),
+    linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
 }
 
-.login-page {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 24px 16px;
-  box-sizing: border-box;
-}
-
-.login-card {
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-brand {
+.side-layout-brand {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 24px;
-  text-align: center;
+  justify-content: center;
+  padding: 48px 64px;
+  color: #fff;
 }
 
-.login-brand h3 {
-  margin: 8px 0 4px;
+.side-layout-brand h1 {
+  margin: 16px 0 8px;
+  font-size: 36px;
+  font-weight: 600;
 }
+
+.side-layout-brand p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 300;
+  opacity: 0.85;
+}
+
+.side-layout-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.side-layout-card {
+  width: min(90vw, 520px);
+  padding: 40px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme='dark'] .side-layout-card {
+  background: #141414;
+}
+
+.login-title {
+  margin-bottom: 16px;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+/* ===== Role form ===== */
 
 /* Checkbox.Group is a flex container, so the grid needs an explicit width to use the full row. */
 .permission-groups {
@@ -203,18 +406,35 @@ html[data-theme='dark'] body {
   row-gap: 4px;
 }
 
-@media (max-width: 600px) {
-  .app-brand-name,
-  .app-user-name {
+/* ===== Mobile (same breakpoint as LayoutContext) ===== */
+
+@media (max-width: 960px) {
+  .side-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .side-layout-brand {
     display: none;
   }
+}
 
+@media (max-width: 768px) {
   .page {
-    padding: 16px;
+    padding: 8px;
   }
 
-  .app-header {
-    padding: 0 16px;
+  .container-header {
+    padding: 0 8px;
+  }
+
+  .container-header .action-flex {
+    gap: 8px;
+    padding-right: 0;
+    border-right: none;
+  }
+
+  .side-layout-card {
+    padding: 20px;
   }
 
   .toolbar .search,
@@ -222,5 +442,9 @@ html[data-theme='dark'] body {
     flex: 1 1 100%;
     max-width: none;
     width: auto;
+  }
+
+  .toolbar-extra {
+    margin-left: 0;
   }
 }

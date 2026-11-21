@@ -104,10 +104,9 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       align: "right",
       onCell: () => ({ onClick: (e) => e.stopPropagation() }),
       render: (_, car) => (
-        <span style={{ whiteSpace: "nowrap" }}>
+        <span className="row-actions">
           <Tooltip title="View">
             <Button
-              type="text"
               icon={<EyeOutlined />}
               aria-label="View"
               onClick={() => router.push(`/cars/${car.id}`)}
@@ -116,7 +115,6 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
           <PermissionWrapper permission={PERMISSIONS.CAR_UPDATE}>
             <Tooltip title="Edit">
               <Button
-                type="text"
                 icon={<EditOutlined />}
                 aria-label="Edit"
                 onClick={() => router.push(`/cars/${car.id}/edit`)}
@@ -132,7 +130,7 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
               onConfirm={() => onDelete(car)}
             >
               <Tooltip title="Delete">
-                <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete" />
+                <Button danger icon={<DeleteOutlined />} aria-label="Delete" />
               </Tooltip>
             </Popconfirm>
           </PermissionWrapper>

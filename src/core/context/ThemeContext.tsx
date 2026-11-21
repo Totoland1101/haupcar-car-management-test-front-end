@@ -9,8 +9,9 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { App as AntApp, ConfigProvider, theme } from "antd";
-import { THEME_COOKIE, type ThemeMode } from "../constants/theme";
+import { App as AntApp, ConfigProvider } from "antd";
+import { buildTheme } from "../constants/theme/theme";
+import { THEME_COOKIE, type ThemeMode } from "../constants/theme/mode";
 
 interface ThemeModeContextProps {
   mode: ThemeMode;
@@ -19,7 +20,8 @@ interface ThemeModeContextProps {
 
 const ThemeModeContext = createContext<ThemeModeContextProps>({ mode: "light", toggle: () => {} });
 
-// `initialMode` comes from the cookie. It is null on the first visit.
+// `initialMode` comes from the cookie. It is null on the first visit, which starts in
+// light mode.
 export function ThemeModeProvider({
   initialMode,
   children,
@@ -28,14 +30,6 @@ export function ThemeModeProvider({
   children: ReactNode;
 }) {
   const [mode, setMode] = useState<ThemeMode>(initialMode ?? "light");
-  const dark = mode === "dark";
-
-  // No saved choice yet, so follow the system setting.
-  useEffect(() => {
-    if (!initialMode && window.matchMedia?.("(prefers-color-scheme: dark)").matches) {
-      setMode("dark");
-    }
-  }, [initialMode]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = mode;
@@ -47,25 +41,7 @@ export function ThemeModeProvider({
 
   return (
     <ThemeModeContext.Provider value={value}>
-      <ConfigProvider
-        theme={{
-          algorithm: dark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-          token: {
-            colorPrimary: "#1d4ed8",
-            borderRadius: 8,
-            // --font-plex-thai is set by next/font in app/layout.tsx.
-            fontFamily:
-              "var(--font-plex-thai), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-          },
-          components: {
-            Layout: {
-              headerBg: dark ? "#141414" : "#ffffff",
-              bodyBg: dark ? "#000000" : "#f4f6fa",
-              footerBg: "transparent",
-            },
-          },
-        }}
-      >
+      <ConfigProvider theme={buildTheme(mode)}>
         <AntApp>{children}</AntApp>
       </ConfigProvider>
     </ThemeModeContext.Provider>

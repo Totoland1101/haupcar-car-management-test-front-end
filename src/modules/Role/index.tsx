@@ -75,10 +75,9 @@ export default function RoleList() {
             <Typography.Text type="secondary">Locked</Typography.Text>
           </Tooltip>
         ) : (
-          <span style={{ whiteSpace: "nowrap" }}>
+          <span className="row-actions">
             <Tooltip title="Edit">
               <Button
-                type="text"
                 icon={<EditOutlined />}
                 aria-label="Edit"
                 onClick={() => setEditing({ open: true, role })}
@@ -96,7 +95,7 @@ export default function RoleList() {
               onConfirm={() => handleDelete(role)}
             >
               <Tooltip title="Delete">
-                <Button type="text" danger icon={<DeleteOutlined />} aria-label="Delete" />
+                <Button danger icon={<DeleteOutlined />} aria-label="Delete" />
               </Tooltip>
             </Popconfirm>
           </span>
@@ -106,26 +105,30 @@ export default function RoleList() {
 
   return (
     <>
-      <PageHeader
-        title="Roles"
-        subtitle="Each role is a set of permissions. Every user has one role."
-        extra={
-          <Button type="primary" icon={<PlusOutlined />} onClick={() => setEditing({ open: true, role: null })}>
-            Add role
-          </Button>
-        }
-      />
+      <PageHeader title="Roles" subtitle="Each role is a set of permissions. Every user has one role." />
 
-      <Card>
-        <Table<Role>
-          rowKey="id"
-          columns={columns}
-          dataSource={roleList}
-          loading={loading}
-          pagination={false}
-          scroll={{ x: 760 }}
-        />
-      </Card>
+      <div className="page-stack">
+        <Card size="small" className="toolbar-card">
+          <div className="toolbar">
+            <Typography.Text type="secondary">{roleList.length} roles</Typography.Text>
+            <div className="toolbar-extra">
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => setEditing({ open: true, role: null })}>
+                Add role
+              </Button>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <Table<Role>
+            rowKey="id"
+            columns={columns}
+            dataSource={roleList}
+            loading={loading}
+            pagination={false}
+            scroll={{ x: 760 }}
+          />
+        </Card>
+      </div>
 
       <Modal
         open={editing.open}

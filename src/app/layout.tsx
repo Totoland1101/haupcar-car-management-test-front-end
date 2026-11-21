@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { IBM_Plex_Sans_Thai } from "next/font/google";
+import { Prompt } from "next/font/google";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { THEME_COOKIE, type ThemeMode } from "@/core/constants/theme";
+import { THEME_COOKIE, type ThemeMode } from "@/core/constants/theme/mode";
 import Providers from "@/core/services/providers";
 import "@/styles/globals.css";
 
-const plexThai = IBM_Plex_Sans_Thai({
+// Prompt covers both Thai and Latin.
+const prompt = Prompt({
   subsets: ["thai", "latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
-  variable: "--font-plex-thai",
+  variable: "--font-prompt",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export default async function RootLayout({
   const initialThemeMode: ThemeMode | null = saved === "light" || saved === "dark" ? saved : null;
 
   return (
-    <html lang="en" data-theme={initialThemeMode ?? "light"} className={plexThai.variable}>
+    <html lang="en" data-theme={initialThemeMode ?? "light"} className={prompt.variable}>
       <body>
         {/* Collects Ant Design's CSS-in-JS styles during server rendering. */}
         <AntdRegistry>

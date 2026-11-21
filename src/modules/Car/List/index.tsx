@@ -57,17 +57,7 @@ export default function CarList() {
 
   return (
     <>
-      <PageHeader
-        title="Cars"
-        subtitle="Every company car recorded in the system"
-        extra={
-          <PermissionWrapper permission={PERMISSIONS.CAR_CREATE}>
-            <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
-              Add car
-            </Button>
-          </PermissionWrapper>
-        }
-      />
+      <PageHeader title="Cars" subtitle="Every company car recorded in the system" />
 
       <SummaryCards
         summary={summary}
@@ -75,8 +65,8 @@ export default function CarList() {
         onSelect={(status) => updateQuery({ status, page: undefined })}
       />
 
-      <Card>
-        {isEmptyRegistry && !hasFilters ? (
+      {isEmptyRegistry && !hasFilters ? (
+        <Card>
           <Empty description="No cars recorded yet" style={{ padding: "32px 0" }}>
             <PermissionWrapper permission={PERMISSIONS.CAR_CREATE}>
               <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
@@ -84,14 +74,25 @@ export default function CarList() {
               </Button>
             </PermissionWrapper>
           </Empty>
-        ) : (
-          <>
+        </Card>
+      ) : (
+        <div className="page-stack">
+          <Card size="small" className="toolbar-card">
             <Filter
               query={query}
               brands={summary?.brands ?? []}
               hasFilters={hasFilters}
               onChange={updateQuery}
+              extra={
+                <PermissionWrapper permission={PERMISSIONS.CAR_CREATE}>
+                  <Button type="primary" icon={<PlusOutlined />} onClick={() => router.push("/cars/new")}>
+                    Add car
+                  </Button>
+                </PermissionWrapper>
+              }
             />
+          </Card>
+          <Card>
             <DataTable
               query={query}
               cars={carList}
@@ -100,9 +101,9 @@ export default function CarList() {
               onChange={updateQuery}
               onDelete={handleDelete}
             />
-          </>
-        )}
-      </Card>
+          </Card>
+        </div>
+      )}
     </>
   );
 }
