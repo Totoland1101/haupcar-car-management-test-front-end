@@ -8,7 +8,7 @@ import PageHeader from "@/components/PageHeader";
 import PermissionWrapper from "@/components/PermissionWrapper";
 import { PERMISSIONS } from "@/core/constants/permission";
 import useCar from "@/core/hooks/useCar";
-import { formatDateTime, formatMileage, orDash } from "@/core/utils/format";
+import { formatDate, formatDateTime, formatMileage, orDash } from "@/core/utils/format";
 import LicensePlate from "../Components/LicensePlate";
 import LoadError from "../Components/LoadError";
 import StatusTag from "../Components/StatusTag";
@@ -56,7 +56,9 @@ export default function CarDetail({ id }: { id: string }) {
     { key: "model", label: "Model", children: car.model },
     { key: "year", label: "Year", children: orDash(car.year) },
     { key: "color", label: "Color", children: orDash(car.color) },
-    { key: "mileage", label: "Mileage", children: formatMileage(car.mileage) },
+    { key: "mileage", label: "Current mileage", children: formatMileage(car.mileage) },
+    { key: "registeredOn", label: "Registered on", children: formatDate(car.registeredOn) },
+    { key: "registeredMileage", label: "Mileage at registration", children: formatMileage(car.registeredMileage) },
     { key: "status", label: "Status", children: <StatusTag status={car.status} /> },
     {
       key: "notes",

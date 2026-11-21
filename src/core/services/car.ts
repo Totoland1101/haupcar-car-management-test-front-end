@@ -13,15 +13,22 @@ export interface Car {
   model: string;
   year: number | null;
   color: string | null;
-  /** Kilometres */
+  /** Current reading, in kilometres */
   mileage: number | null;
+  /** YYYY-MM-DD, the day the car was registered in the system */
+  registeredOn: string;
+  /** Kilometres on the day the car was registered */
+  registeredMileage: number | null;
   status: CarStatus;
   notes: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export type CarPayload = Omit<Car, "id" | "createdAt" | "updatedAt">;
+export type CarPayload = Omit<Car, "id" | "createdAt" | "updatedAt" | "registeredOn"> & {
+  /** null lets the API use today */
+  registeredOn: string | null;
+};
 
 export type CarListParams = {
   search?: string;

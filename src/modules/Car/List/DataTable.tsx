@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import PermissionWrapper from "@/components/PermissionWrapper";
 import { PERMISSIONS } from "@/core/constants/permission";
 import type { Car } from "@/core/services/car";
-import { formatDateTime, formatMileage, orDash } from "@/core/utils/format";
+import { formatDate, formatDateTime, formatMileage, orDash } from "@/core/utils/format";
 import type { ListQuery, QueryChanges } from "@/core/utils/listQuery";
 import LicensePlate from "../Components/LicensePlate";
 import StatusTag from "../Components/StatusTag";
@@ -82,6 +82,14 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       sorter: true,
       sortOrder: sortOrderFor(query, "mileage"),
       render: formatMileage,
+    },
+    {
+      title: "Registered",
+      key: "registeredOn",
+      dataIndex: "registeredOn",
+      sorter: true,
+      sortOrder: sortOrderFor(query, "registeredOn"),
+      render: formatDate,
     },
     {
       title: "Status",

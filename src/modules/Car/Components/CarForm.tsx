@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { AutoComplete, Button, Col, Form, Input, InputNumber, Radio, Row, Select } from "antd";
+import dayjs, { type Dayjs } from "dayjs";
+import { AutoComplete, Button, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select } from "antd";
 import { COMMON_BRANDS, PROVINCES, STATUS_OPTIONS } from "@/core/constants/car";
 import type { Car, CarPayload, CarStatus } from "@/core/services/car";
 import type { ResponseError } from "@/core/utils/http_response";
@@ -15,6 +16,8 @@ interface FormValues {
   year: number | null;
   color: string | null;
   mileage: number | null;
+  registeredOn: Dayjs | null;
+  registeredMileage: number | null;
   status: CarStatus;
   notes: string | null;
 }
@@ -27,6 +30,8 @@ const EMPTY_CAR: FormValues = {
   year: null,
   color: "",
   mileage: null,
+  registeredOn: null,
+  registeredMileage: null,
   status: "available",
   notes: "",
 };
@@ -43,6 +48,8 @@ function toPayload(values: FormValues): CarPayload {
     year: blankToNull(values.year),
     color: blankToNull(values.color?.trim()),
     mileage: blankToNull(values.mileage),
+    registeredOn: values.registeredOn ? values.registeredOn.format("YYYY-MM-DD") : null,
+    registeredMileage: blankToNull(values.registeredMileage),
     status: values.status,
     notes: blankToNull(values.notes?.trim()),
   };
@@ -90,7 +97,12 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
     <Form
       form={form}
       layout="vertical"
-      initialValues={{ ...EMPTY_CAR, ...initialValues }}
+      initialValues={{
+        ...EMPTY_CAR,
+        ...initialValues,
+        // A new car is registered today unless the user picks another day.
+        registeredOn: initialValues ? dayjs(initialValues.registeredOn) : dayjs(),
+      }}
       onFinish={handleFinish}
       scrollToFirstError
       requiredMark="optional"
@@ -144,7 +156,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
         <Col xs={24} sm={8}>
-          <Form.Item label="Mileage" name="mileage">
+          <Form.Item label="Current mileage" name="mileage">
             <InputNumber<number | string>
               placeholder="0"
               min={0}
@@ -160,6 +172,37 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
 
+        <Col xs={24} sm={12}>
+          <Form.Item
+            label="Registered on"
+            name="registeredOn"
+            extra="The day the car was registered in the system"
+            rules={[{ required: true, message: "Registration date is required" }]}
+          >
+            <DatePicker
+              format="D MMM YYYY"
+              disabledDate={(day) => day.isAfter(dayjs(), "day")}
+              allowClear={false}
+              style={{ width: "100%" }}
+            />
+          </Form.Item>
+        </Col>
+        <Col xs={24} sm={12}>
+          <Form.Item label="Mileage at registration" name="registeredMileage" extra="The reading on that day">
+            <InputNumber<number | string>
+              placeholder="0"
+              min={0}
+              max={10_000_000}
+              precision={0}
+              suffix="km"
+              formatter={(value) =>
+                value === undefined || value === "" ? "" : Number(value).toLocaleString("en-US")
+              }
+              parser={(value) => value?.replace(/[^\d]/g, "") ?? ""}
+              style={{ width: "100%" }}
+            />
+          </Form.Item>
+        </Col>
         <Col span={24}>
           <Form.Item label="Status" name="status" rules={[{ required: true }]}>
             <Radio.Group options={STATUS_OPTIONS} optionType="button" buttonStyle="solid" />
