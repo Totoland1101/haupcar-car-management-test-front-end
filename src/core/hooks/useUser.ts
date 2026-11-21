@@ -62,6 +62,13 @@ const useUser = () => {
     return response;
   };
 
+  const resetPassword = async (user: User, password: string): Promise<ServiceResponse<null>> => {
+    const response = await UserService.resetPassword(user.id, password);
+    if (response.success) message.success(`Set a new password for ${user.username}`);
+    else message.error(response.error.message);
+    return response;
+  };
+
   const deleteUser = async (user: User): Promise<boolean> => {
     const { success, error } = await UserService.delete(user.id);
     if (success) {
@@ -79,6 +86,7 @@ const useUser = () => {
     fetchUsers,
     fetchRoleOptions,
     saveUser,
+    resetPassword,
     deleteUser,
   };
 };

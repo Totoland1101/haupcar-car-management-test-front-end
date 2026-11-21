@@ -1,11 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { App, Button, Card, Descriptions, Form, Tag } from "antd";
+import { App, Button, Card, Descriptions, Form, Modal, Tag } from "antd";
+import { KeyOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import { useAuth } from "@/core/context/AuthContext";
+import AuthService from "@/core/services/auth";
 import useDepartment from "@/core/hooks/useDepartment";
 import type { ProfilePayload } from "@/core/services/user";
+import PasswordForm, { type PasswordValues } from "../User/Components/PasswordForm";
 import ProfileFields from "../User/Components/ProfileFields";
 import { toProfilePayload } from "../User/Components/UserForm";
 
@@ -17,12 +20,21 @@ export default function MyProfile() {
   const { departmentOptions, fetchDepartments } = useDepartment();
   const [form] = Form.useForm<Partial<ProfilePayload>>();
   const [saving, setSaving] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
     fetchDepartments();
   }, []);
 
   if (!user) return null;
+
+  async function handlePassword({ currentPassword, newPassword }: PasswordValues) {
+    const { success, error } = await AuthService.changeMyPassword(currentPassword ?? "", newPassword);
+    if (!success) return error;
+    setChangingPassword(false);
+    message.success("Your password has been changed");
+    return null;
+  }
 
   async function handleFinish(values: Partial<ProfilePayload>) {
     setSaving(true);
@@ -43,7 +55,15 @@ export default function MyProfile() {
       <PageHeader title="My profile" subtitle="Your details as other people in the system see them" />
 
       <div className="page-stack" style={{ maxWidth: 820 }}>
-        <Card size="small">
+        <Card
+          size="small"
+          title="Account"
+          extra={
+            <Button icon={<KeyOutlined />} onClick={() => setChangingPassword(true)}>
+              Change password
+            </Button>
+          }
+        >
           <Descriptions
             column={{ xs: 1, sm: 2 }}
             items={[
@@ -77,6 +97,16 @@ export default function MyProfile() {
           </Form>
         </Card>
       </div>
+
+      <Modal
+        open={changingPassword}
+        title="Change your password"
+        footer={null}
+        onCancel={() => setChangingPassword(false)}
+        destroyOnHidden
+      >
+        <PasswordForm askCurrent onSubmit={handlePassword} onCancel={() => setChangingPassword(false)} />
+      </Modal>
     </>
   );
 }

@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { Badge, Button, Card, Modal, Popconfirm, Table, Tag, Tooltip, Typography, type TableProps } from "antd";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, KeyOutlined, PlusOutlined } from "@ant-design/icons";
 import PageHeader from "@/components/PageHeader";
 import { useAuth } from "@/core/context/AuthContext";
 import useDepartment from "@/core/hooks/useDepartment";
 import useUser from "@/core/hooks/useUser";
 import type { User, UserPayload } from "@/core/services/user";
 import { formatDateTime } from "@/core/utils/format";
+import PasswordForm, { type PasswordValues } from "./Components/PasswordForm";
 import UserForm from "./Components/UserForm";
 
 export default function UserList() {
   const { user: me } = useAuth();
-  const { userList, loading, roleOptions, fetchUsers, fetchRoleOptions, saveUser, deleteUser } = useUser();
+  const { userList, loading, roleOptions, fetchUsers, fetchRoleOptions, saveUser, resetPassword, deleteUser } = useUser();
+  const [passwordFor, setPasswordFor] = useState<User | null>(null);
   const { departmentOptions, fetchDepartments } = useDepartment();
   const [editing, setEditing] = useState<{ open: boolean; user: User | null }>({ open: false, user: null });
 
@@ -30,6 +32,14 @@ export default function UserList() {
     if (!success) return error;
     closeForm();
     fetchUsers();
+    return null;
+  }
+
+  async function handlePassword({ newPassword }: PasswordValues) {
+    if (!passwordFor) return null;
+    const { success, error } = await resetPassword(passwordFor, newPassword);
+    if (!success) return error;
+    setPasswordFor(null);
     return null;
   }
 
@@ -73,6 +83,9 @@ export default function UserList() {
       align: "right",
       render: (_, user) => (
         <span className="row-actions">
+          <Tooltip title="Set a new password">
+            <Button icon={<KeyOutlined />} aria-label="Set a new password" onClick={() => setPasswordFor(user)} />
+          </Tooltip>
           <Tooltip title="Edit">
             <Button
               icon={<EditOutlined />}
@@ -128,6 +141,16 @@ export default function UserList() {
           />
         </Card>
       </div>
+
+      <Modal
+        open={!!passwordFor}
+        title={passwordFor ? `Set a new password for ${passwordFor.username}` : ""}
+        footer={null}
+        onCancel={() => setPasswordFor(null)}
+        destroyOnHidden
+      >
+        <PasswordForm askCurrent={false} onSubmit={handlePassword} onCancel={() => setPasswordFor(null)} />
+      </Modal>
 
       <Modal
         open={editing.open}

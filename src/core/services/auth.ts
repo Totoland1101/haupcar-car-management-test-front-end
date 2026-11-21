@@ -44,6 +44,14 @@ const AuthService = {
       return HttpResponse.error(error);
     }
   },
+  changeMyPassword: async (currentPassword: string, newPassword: string): Promise<ServiceResponse<null>> => {
+    try {
+      const response = await HttpService.put<null>("/auth/me/password", { currentPassword, newPassword });
+      return HttpResponse.success(response);
+    } catch (error) {
+      return HttpResponse.error(error);
+    }
+  },
   /** The logged-in user editing their own details */
   updateMyProfile: async (payload: ProfilePayload): Promise<ServiceResponse<AuthUser>> => {
     try {

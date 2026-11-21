@@ -81,6 +81,15 @@ const UserService = {
       return HttpResponse.error(error);
     }
   },
+  /** An admin setting a new password for someone else */
+  resetPassword: async (id: number, password: string): Promise<ServiceResponse<null>> => {
+    try {
+      const response = await HttpService.put<null>(`/users/${id}/password`, { password });
+      return HttpResponse.success(response);
+    } catch (error) {
+      return HttpResponse.error(error);
+    }
+  },
   delete: async (id: number): Promise<ServiceResponse<null>> => {
     try {
       const response = await HttpService.delete(`/users/${id}`);
