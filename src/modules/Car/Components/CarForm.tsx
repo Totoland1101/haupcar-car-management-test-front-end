@@ -188,7 +188,12 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
         <Col xs={24} sm={12}>
-          <Form.Item label="Mileage at registration" name="registeredMileage" extra="The reading on that day">
+          <Form.Item
+            label="Mileage at registration"
+            name="registeredMileage"
+            extra="The reading on that day"
+            rules={[{ required: true, message: "Mileage at registration is required" }]}
+          >
             <InputNumber<number | string>
               placeholder="0"
               min={0}
