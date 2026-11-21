@@ -9,6 +9,8 @@ export type FuelType = "gasoline" | "diesel" | "hybrid" | "plug_in_hybrid" | "el
 export interface Car {
   id: number;
   registrationNumber: string;
+  /** A temporary red plate (ป้ายแดง) for a car that isn't registered yet */
+  redPlate: boolean;
   province: string;
   brand: string;
   model: string;

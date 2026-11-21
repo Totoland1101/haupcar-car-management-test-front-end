@@ -45,7 +45,7 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       key: "registrationNumber",
       sorter: true,
       sortOrder: sortOrderFor(query, "registrationNumber"),
-      render: (_, car) => <LicensePlate number={car.registrationNumber} province={car.province} />,
+      render: (_, car) => <LicensePlate number={car.registrationNumber} province={car.province} red={car.redPlate} />,
     },
     {
       // Phones only: the columns hidden there, in one cell

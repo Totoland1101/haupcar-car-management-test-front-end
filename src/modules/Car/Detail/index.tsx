@@ -110,7 +110,7 @@ export default function CarDetail({ id }: { id: string }) {
 
       <Card style={{ marginBottom: 16 }}>
         <div className="car-hero">
-          <LicensePlate number={car.registrationNumber} province={car.province} size="large" />
+          <LicensePlate number={car.registrationNumber} province={car.province} red={car.redPlate} size="large" />
           <div>
             <Typography.Title level={4} style={{ margin: 0 }}>
               {car.brand} {car.model}

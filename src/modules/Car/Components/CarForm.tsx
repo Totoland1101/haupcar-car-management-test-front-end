@@ -1,6 +1,6 @@
 import { useState } from "react";
 import dayjs, { type Dayjs } from "dayjs";
-import { AutoComplete, Button, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select } from "antd";
+import { AutoComplete, Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Radio, Row, Select } from "antd";
 import { COMMON_BRANDS, FUEL_OPTIONS, PROVINCES, STATUS_OPTIONS, THAI_PLATE, modelsForBrand } from "@/core/constants/car";
 import type { Car, CarPayload, CarStatus, FuelType } from "@/core/services/car";
 import type { ResponseError } from "@/core/utils/http_response";
@@ -10,6 +10,7 @@ const provinceOptions = PROVINCES.map((name) => ({ value: name, label: name }));
 
 interface FormValues {
   registrationNumber: string;
+  redPlate: boolean;
   province?: string;
   brand: string;
   model: string;
@@ -25,6 +26,7 @@ interface FormValues {
 
 const EMPTY_CAR: FormValues = {
   registrationNumber: "",
+  redPlate: false,
   province: undefined,
   brand: "",
   model: "",
@@ -44,6 +46,7 @@ function toPayload(values: FormValues): CarPayload {
     value === undefined || value === "" ? null : value;
   return {
     registrationNumber: values.registrationNumber,
+    redPlate: values.redPlate,
     province: values.province ?? "",
     brand: values.brand,
     model: values.model,
@@ -144,6 +147,9 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             extra="As shown on the plate, e.g. 1กข 1234"
           >
             <Input placeholder="1กข 1234" maxLength={20} autoFocus />
+          </Form.Item>
+          <Form.Item name="redPlate" valuePropName="checked" className="red-plate-check">
+            <Checkbox>Red plate (ป้ายแดง)</Checkbox>
           </Form.Item>
         </Col>
         <Col xs={24} md={12} xl={6}>

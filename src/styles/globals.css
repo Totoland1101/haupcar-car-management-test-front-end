@@ -332,6 +332,13 @@ html[data-theme='dark'] .mobile-logo {
 .plate-large .plate-province {
   font-size: 15px;
 }
+/* Red plate (ป้ายแดง): black text on red */
+.plate-red {
+  background: #e3262e;
+}
+.red-plate-check {
+  margin-top: -12px;
+}
 
 .car-hero {
   display: flex;
