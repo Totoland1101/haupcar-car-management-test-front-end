@@ -39,14 +39,16 @@ export default function CarCreate() {
   return (
     <>
       <PageHeader title="Add a car" breadcrumb={[{ title: "Cars", to: "/" }, { title: "Add car" }]} />
-      {canAddPhotos && (
-        <Card title="Photos" style={{ maxWidth: 820, marginBottom: 16 }}>
-          <CarPhotos editable pending={photos} onPendingChange={setPhotos} />
+      <div className="page-stack">
+        {canAddPhotos && (
+          <Card title="Photos">
+            <CarPhotos editable pending={photos} onPendingChange={setPhotos} />
+          </Card>
+        )}
+        <Card title="Details">
+          <CarForm submitLabel="Add car" onSubmit={handleSubmit} onCancel={() => router.back()} />
         </Card>
-      )}
-      <Card style={{ maxWidth: 820 }}>
-        <CarForm submitLabel="Add car" onSubmit={handleSubmit} onCancel={() => router.back()} />
-      </Card>
+      </div>
     </>
   );
 }

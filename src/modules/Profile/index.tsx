@@ -54,7 +54,7 @@ export default function MyProfile() {
     <>
       <PageHeader title="My profile" subtitle="Your details as other people in the system see them" />
 
-      <div className="page-stack" style={{ maxWidth: 820 }}>
+      <div className="page-stack">
         <Card
           size="small"
           title="Account"

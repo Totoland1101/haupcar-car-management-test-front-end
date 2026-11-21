@@ -47,23 +47,25 @@ export default function CarEdit({ id }: { id: string }) {
           { title: "Edit" },
         ]}
       />
-      <Card style={{ maxWidth: 820 }}>
-        {!loaded || !car ? (
-          <Skeleton active paragraph={{ rows: 8 }} />
-        ) : (
-          <CarForm
-            initialValues={car}
-            submitLabel="Save changes"
-            onSubmit={handleSubmit}
-            onCancel={() => router.back()}
-          />
+      <div className="page-stack">
+        {loaded && car && (
+          <Card title="Photos">
+            <CarPhotos carId={car.id} editable />
+          </Card>
         )}
-      </Card>
-      {loaded && car && (
-        <Card title="Photos" style={{ maxWidth: 820, marginTop: 16 }}>
-          <CarPhotos carId={car.id} editable />
+        <Card title="Details">
+          {!loaded || !car ? (
+            <Skeleton active paragraph={{ rows: 8 }} />
+          ) : (
+            <CarForm
+              initialValues={car}
+              submitLabel="Save changes"
+              onSubmit={handleSubmit}
+              onCancel={() => router.back()}
+            />
+          )}
         </Card>
-      )}
+      </div>
     </>
   );
 }

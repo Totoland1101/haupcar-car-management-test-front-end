@@ -108,7 +108,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
       requiredMark="optional"
     >
       <Row gutter={16}>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} xl={6}>
           <Form.Item
             label="Registration number"
             name="registrationNumber"
@@ -118,7 +118,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             <Input placeholder="1กข 1234" maxLength={20} autoFocus />
           </Form.Item>
         </Col>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} xl={6}>
           <Form.Item
             label="Province"
             name="province"
@@ -128,18 +128,18 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
 
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} xl={6}>
           <Form.Item label="Brand" name="brand" rules={[required("Brand"), { max: 50 }]}>
             <AutoComplete options={brandOptions} placeholder="e.g. Toyota" />
           </Form.Item>
         </Col>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} xl={6}>
           <Form.Item label="Model" name="model" rules={[required("Model"), { max: 50 }]}>
             <Input placeholder="e.g. Yaris Ativ" maxLength={50} />
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={8} xl={4}>
           <Form.Item label="Year" name="year">
             <InputNumber
               placeholder={String(maxYear - 1)}
@@ -150,12 +150,12 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={8} xl={4}>
           <Form.Item label="Color" name="color" rules={[{ max: 30 }]}>
             <Input placeholder="e.g. White" maxLength={30} />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={8} xl={4}>
           <Form.Item label="Current mileage" name="mileage">
             <InputNumber<number | string>
               placeholder="0"
@@ -172,7 +172,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={12}>
+        <Col xs={24} sm={12} xl={6}>
           <Form.Item
             label="Registered on"
             name="registeredOn"
@@ -187,7 +187,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={12}>
+        <Col xs={24} sm={12} xl={6}>
           <Form.Item
             label="Mileage at registration"
             name="registeredMileage"
