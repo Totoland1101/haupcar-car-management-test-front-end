@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import type { PermissionCode } from "../constants/permission";
-import AuthService, { type AuthUser, type LoginResult } from "../services/auth";
+import AuthService, { type AuthUser, type LoginResult, type RegisterPayload } from "../services/auth";
 import type { ServiceResponse } from "../utils/http_response";
 import { clearAccessToken, getAccessToken, setAccessToken } from "../utils/token";
 
@@ -22,6 +22,8 @@ interface AuthContextProps {
   status: AuthStatus;
   errorMessage: string | null;
   login: (username: string, password: string) => Promise<ServiceResponse<LoginResult>>;
+  /** Signs up. The account waits for approval, so this doesn't log in. */
+  register: (payload: RegisterPayload) => Promise<ServiceResponse<{ message: string }>>;
   logout: () => void;
   /** True when the user has every listed permission */
   hasPermission: (...codes: PermissionCode[]) => boolean;
@@ -63,6 +65,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return response;
   }, []);
 
+  const register = useCallback((payload: RegisterPayload) => AuthService.register(payload), []);
+
   // A full page load clears every bit of the previous user's data held in memory.
   const logout = useCallback(() => {
     clearAccessToken();
@@ -76,8 +80,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo(
-    () => ({ ...state, login, logout, hasPermission }),
-    [state, login, logout, hasPermission]
+    () => ({ ...state, login, register, logout, hasPermission }),
+    [state, login, register, logout, hasPermission]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

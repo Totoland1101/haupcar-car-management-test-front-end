@@ -19,7 +19,21 @@ export interface LoginResult {
   user: AuthUser;
 }
 
+export interface RegisterPayload {
+  username: string;
+  name: string;
+  password: string;
+}
+
 const AuthService = {
+  register: async (payload: RegisterPayload): Promise<ServiceResponse<{ message: string }>> => {
+    try {
+      const response = await HttpService.post<{ message: string }>("/auth/register", payload);
+      return HttpResponse.success(response);
+    } catch (error) {
+      return HttpResponse.error(error);
+    }
+  },
   login: async (payload: { username: string; password: string }): Promise<ServiceResponse<LoginResult>> => {
     try {
       const response = await HttpService.post<LoginResult>("/auth/login", payload);

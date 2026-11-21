@@ -49,7 +49,7 @@ export default function UserList() {
     {
       title: "Role",
       key: "role",
-      render: (_, user) => <Tag color="blue">{user.role.name}</Tag>,
+      render: (_, user) => (user.role ? <Tag color="blue">{user.role.name}</Tag> : "-"),
     },
     {
       title: "Status",

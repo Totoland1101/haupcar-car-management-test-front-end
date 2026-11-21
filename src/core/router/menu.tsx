@@ -28,6 +28,7 @@ export const mainMenu: MenuEntry[] = [
     children: [
       { key: "/users", label: "Users", path: "/users", permission: [PERMISSIONS.USER_MANAGE] },
       { key: "/roles", label: "Roles", path: "/roles", permission: [PERMISSIONS.ROLE_MANAGE] },
+      { key: "/approvals", label: "Approvals", path: "/approvals", permission: [PERMISSIONS.USER_APPROVE] },
     ],
   },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Alert, Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
@@ -22,7 +23,7 @@ export default function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { status, login } = useAuth();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ message: string; waiting: boolean } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const next = safeNext(searchParams.get("next"));
 
@@ -36,7 +37,8 @@ export default function Login() {
     setError(null);
     const { success, error: loginError } = await login(username, password);
     if (!success) {
-      setError(loginError.message);
+      // 403 means the password was right but the account can't log in yet (or any more).
+      setError({ message: loginError.message, waiting: loginError.status === 403 });
       setSubmitting(false);
     }
   }
@@ -45,12 +47,19 @@ export default function Login() {
     <SideLayout>
       <div className="login-title">Log in</div>
 
-      {error && <Alert type="error" showIcon title={error} style={{ marginBottom: 16 }} />}
+      {error && (
+        <Alert
+          type={error.waiting ? "warning" : "error"}
+          showIcon
+          title={error.message}
+          style={{ marginBottom: 16 }}
+        />
+      )}
 
       <Form<LoginValues>
         name="login_form"
         labelCol={{ flex: "96px" }}
-        labelAlign="left"
+        labelAlign="start"
         requiredMark={false}
         onFinish={handleFinish}
       >
@@ -66,6 +75,10 @@ export default function Login() {
           </Button>
         </Form.Item>
       </Form>
+
+      <div className="login-switch">
+        No account yet? <Link href="/register">Register</Link>
+      </div>
     </SideLayout>
   );
 }

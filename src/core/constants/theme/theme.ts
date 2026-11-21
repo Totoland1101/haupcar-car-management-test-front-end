@@ -43,6 +43,7 @@ export function buildTheme(mode: ThemeMode): ThemeConfig {
       InputNumber: { paddingBlock: 9, paddingInline: 16 },
       Select: { controlHeight: 42 },
       DatePicker: { controlHeight: 42 },
+      Segmented: { itemSelectedBg: color.primary, itemSelectedColor: color.white },
     },
   };
 }

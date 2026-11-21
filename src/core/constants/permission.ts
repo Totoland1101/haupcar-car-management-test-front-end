@@ -5,6 +5,7 @@ export const PERMISSIONS = {
   CAR_UPDATE: "car.update",
   CAR_DELETE: "car.delete",
   USER_MANAGE: "user.manage",
+  USER_APPROVE: "user.approve",
   ROLE_MANAGE: "role.manage",
 } as const;
 

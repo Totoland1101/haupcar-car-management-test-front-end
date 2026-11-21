@@ -54,7 +54,7 @@ export default function UserForm({ user, isSelf, roleOptions, onSubmit, onCancel
       requiredMark="optional"
       initialValues={
         user
-          ? { username: user.username, name: user.name, roleId: user.role.id, isActive: user.isActive }
+          ? { username: user.username, name: user.name, roleId: user.role?.id, isActive: user.isActive }
           : { isActive: true }
       }
       onFinish={handleFinish}

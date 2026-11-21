@@ -1,9 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Layout } from "antd";
+import { PERMISSIONS } from "@/core/constants/permission";
+import { useAuth } from "@/core/context/AuthContext";
 import { useLayout } from "@/core/context/LayoutContext";
+import useRegistration from "@/core/hooks/useRegistration";
 import Header from "../Header";
 import BurgerMenu from "./BurgerMenu";
 import Sidebar from "./Sidebar";
@@ -12,6 +15,14 @@ import Sidebar from "./Sidebar";
 // On mobile the sidebar moves into a burger menu.
 export default function AppLayout({ children }: { children: ReactNode }) {
   const { isMobile } = useLayout();
+  const { hasPermission } = useAuth();
+  const { fetchCounts } = useRegistration();
+  const canApprove = hasPermission(PERMISSIONS.USER_APPROVE);
+
+  // For the badge on the Approvals menu item
+  useEffect(() => {
+    if (canApprove) fetchCounts();
+  }, [canApprove]);
 
   return (
     <Layout className="layout-container">

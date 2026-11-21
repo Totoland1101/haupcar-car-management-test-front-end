@@ -3,13 +3,20 @@ import Http from "./HttpService";
 
 const { HttpService } = Http;
 
+export type UserStatus = "pending" | "approved" | "rejected";
+
 export interface User {
   id: number;
   username: string;
   name: string;
   isActive: boolean;
   lastLoginAt: string | null;
-  role: { id: number; name: string };
+  status: UserStatus;
+  /** null for a registration that hasn't been approved yet */
+  role: { id: number; name: string } | null;
+  /** When the registration was approved or rejected, or the account was created by an admin */
+  reviewedAt: string | null;
+  reviewedBy: { id: number; name: string } | null;
   createdAt: string;
   updatedAt: string;
 }
