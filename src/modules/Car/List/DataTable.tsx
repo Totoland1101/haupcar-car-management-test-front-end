@@ -88,15 +88,16 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       render: orDash,
     },
     {
+      // Color and fuel only fit next to the other columns from 1600px up
       title: "Color",
-      responsive: ["xl"],
+      responsive: ["xxl"],
       key: "color",
       dataIndex: "color",
       render: orDash,
     },
     {
       title: "Fuel",
-      responsive: ["xl"],
+      responsive: ["xxl"],
       key: "fuelType",
       dataIndex: "fuelType",
       render: (fuel: Car["fuelType"]) => (fuel ? FUEL_TYPES[fuel] : "-"),
@@ -142,6 +143,8 @@ export default function DataTable({ query, cars, total, loading, onChange, onDel
       // On a phone, tapping the row opens the car, which has Edit and Delete.
       responsive: ["sm"],
       align: "right",
+      // Stays in view when the table scrolls sideways
+      fixed: "right",
       onCell: () => ({ onClick: (e) => e.stopPropagation() }),
       render: (_, car) => (
         <span className="row-actions">

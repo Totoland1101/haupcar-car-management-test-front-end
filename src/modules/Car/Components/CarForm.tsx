@@ -182,12 +182,12 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={8} xl={4}>
+        <Col xs={24} sm={8} xxl={4}>
           <Form.Item label="Fuel type" name="fuelType" rules={[{ required: true, message: "Fuel type is required" }]}>
             <Select options={FUEL_OPTIONS} placeholder="Select fuel" />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={8} xl={4}>
+        <Col xs={24} sm={8} xxl={4}>
           <Form.Item label="Year" name="year">
             <InputNumber
               placeholder={String(maxYear - 1)}
@@ -198,12 +198,12 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={8} xl={4}>
+        <Col xs={24} sm={8} xxl={4}>
           <Form.Item label="Color" name="color" rules={[{ max: 30 }]}>
             <Input placeholder="e.g. White" maxLength={30} />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={8} xl={4}>
+        <Col xs={24} sm={8} xxl={4}>
           <Form.Item label="Current mileage" name="mileage">
             <InputNumber<number | string>
               placeholder="0"
@@ -220,7 +220,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
           </Form.Item>
         </Col>
 
-        <Col xs={24} sm={8} xl={4}>
+        <Col xs={24} sm={8} xxl={4}>
           <Form.Item
             label="Registered on"
             name="registeredOn"
@@ -235,7 +235,7 @@ export default function CarForm({ initialValues, submitLabel, onSubmit, onCancel
             />
           </Form.Item>
         </Col>
-        <Col xs={24} sm={8} xl={4}>
+        <Col xs={24} sm={8} xxl={4}>
           <Form.Item
             label="Mileage at registration"
             name="registeredMileage"
