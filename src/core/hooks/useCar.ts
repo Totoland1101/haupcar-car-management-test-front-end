@@ -61,6 +61,9 @@ const useCar = () => {
 
   const setListQuery = (query: ListQuery) => onChangeState({ listQuery: query });
 
+  // Called by the menu and the logo, so going to Cars starts on the first page.
+  const goToFirstPage = () => onChangeState({ listQuery: { ...listQuery, page: 1 } });
+
   const fetchCarList = async (params: CarListParams) => {
     const requestID = ++listRequestID.current;
     onChangeState({ loadingList: true });
@@ -124,6 +127,7 @@ const useCar = () => {
   return {
     listQuery,
     setListQuery,
+    goToFirstPage,
     carList,
     total,
     summary,

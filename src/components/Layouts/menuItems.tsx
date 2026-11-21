@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Badge, type MenuProps } from "antd";
 import { useAuth } from "@/core/context/AuthContext";
+import useCar from "@/core/hooks/useCar";
 import useRegistration from "@/core/hooks/useRegistration";
 import { mainMenu } from "@/core/router/menu";
 
@@ -10,6 +11,7 @@ import { mainMenu } from "@/core/router/menu";
 export function useMenuItems(): MenuProps["items"] {
   const { hasPermission } = useAuth();
   const { counts } = useRegistration();
+  const { goToFirstPage } = useCar();
 
   return mainMenu.flatMap((group) => {
     const children = (group.children ?? []).filter(
@@ -24,7 +26,11 @@ export function useMenuItems(): MenuProps["items"] {
         children: children.map((entry) => ({
           key: entry.key,
           label: (
-            <Link href={entry.path ?? "/"} className="menu-link">
+            <Link
+              href={entry.path ?? "/"}
+              className="menu-link"
+              onClick={entry.key === "/" ? goToFirstPage : undefined}
+            >
               {entry.label}
               {/* How many registrations are waiting. AppLayout loads the count. */}
               {entry.key === "/approvals" && <Badge count={counts.pending} size="small" />}

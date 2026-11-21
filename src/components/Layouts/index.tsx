@@ -6,6 +6,7 @@ import { Layout } from "antd";
 import { PERMISSIONS } from "@/core/constants/permission";
 import { useAuth } from "@/core/context/AuthContext";
 import { useLayout } from "@/core/context/LayoutContext";
+import useCar from "@/core/hooks/useCar";
 import useRegistration from "@/core/hooks/useRegistration";
 import Header from "../Header";
 import BurgerMenu from "./BurgerMenu";
@@ -17,6 +18,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const { isMobile } = useLayout();
   const { hasPermission } = useAuth();
   const { fetchCounts } = useRegistration();
+  const { goToFirstPage } = useCar();
   const canApprove = hasPermission(PERMISSIONS.USER_APPROVE);
 
   // For the badge on the Approvals menu item
@@ -33,7 +35,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             isMobile && (
               <div className="header-left">
                 <BurgerMenu />
-                <Link href="/" className="mobile-logo">
+                <Link href="/" className="mobile-logo" onClick={goToFirstPage}>
                   <img src="/car.svg" alt="" width={26} height={26} />
                   <span>haupcar-management</span>
                 </Link>

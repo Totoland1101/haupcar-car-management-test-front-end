@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Button, Drawer, Menu } from "antd";
 import { CloseOutlined, MenuOutlined } from "@ant-design/icons";
 import variable from "@/core/constants/theme/variable";
+import useCar from "@/core/hooks/useCar";
 import { selectedMenuKey } from "@/core/router/menu";
 import { openMenuKeys, useMenuItems } from "./menuItems";
 
@@ -13,6 +14,7 @@ import { openMenuKeys, useMenuItems } from "./menuItems";
 export default function BurgerMenu() {
   const pathname = usePathname();
   const items = useMenuItems();
+  const { goToFirstPage } = useCar();
   const [open, setOpen] = useState(false);
 
   // Close after picking a page.
@@ -32,7 +34,7 @@ export default function BurgerMenu() {
         closeIcon={false}
         title={
           <div className="mobile-nav-title">
-            <Link href="/" className="sider-logo">
+            <Link href="/" className="sider-logo" onClick={goToFirstPage}>
               <img src="/car.svg" alt="" width={28} height={28} />
               <span>haupcar-management</span>
             </Link>

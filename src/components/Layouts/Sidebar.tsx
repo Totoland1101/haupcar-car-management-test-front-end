@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Layout, Menu } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useLayout } from "@/core/context/LayoutContext";
+import useCar from "@/core/hooks/useCar";
 import { selectedMenuKey } from "@/core/router/menu";
 import { openMenuKeys, useMenuItems } from "./menuItems";
 
@@ -12,6 +13,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useLayout();
   const items = useMenuItems();
+  const { goToFirstPage } = useCar();
 
   return (
     <Layout.Sider
@@ -30,7 +32,7 @@ export default function Sidebar() {
         </div>
       }
     >
-      <Link href="/" className={collapsed ? "sider-logo collapsed" : "sider-logo"}>
+      <Link href="/" className={collapsed ? "sider-logo collapsed" : "sider-logo"} onClick={goToFirstPage}>
         <img src="/car.svg" alt="" width={32} height={32} />
         {!collapsed && <span>haupcar-management</span>}
       </Link>
