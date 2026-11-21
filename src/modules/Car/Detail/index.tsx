@@ -8,7 +8,6 @@ import PageHeader from "@/components/PageHeader";
 import PermissionWrapper from "@/components/PermissionWrapper";
 import { FUEL_TYPES } from "@/core/constants/car";
 import { PERMISSIONS } from "@/core/constants/permission";
-import { useAuth } from "@/core/context/AuthContext";
 import useCar from "@/core/hooks/useCar";
 import { formatDate, formatDateTime, formatMileage, orDash } from "@/core/utils/format";
 import CarPhotos from "../Components/CarPhotos";
@@ -19,7 +18,6 @@ import StatusTag from "../Components/StatusTag";
 export default function CarDetail({ id }: { id: string }) {
   const router = useRouter();
   const { carDetail: car, detailError, fetchCarDetail, deleteCar } = useCar();
-  const { hasPermission } = useAuth();
   // carDetail is shared state and may still hold the car from the previous page,
   // so show it only once this page's own request has finished.
   const [loaded, setLoaded] = useState(false);
@@ -127,7 +125,8 @@ export default function CarDetail({ id }: { id: string }) {
       </Card>
 
       <Card title="Photos" style={{ marginBottom: 16 }}>
-        <CarPhotos carId={car.id} editable={hasPermission(PERMISSIONS.CAR_UPDATE)} />
+        {/* Photos are changed on the edit page */}
+        <CarPhotos carId={car.id} />
       </Card>
 
       <Card title="Details">
